@@ -75,12 +75,42 @@
     </div>
 
     <div id="helikopterlerPage" class="page-content">
-        <div class="page-title">
-            <span>Helikopterler</span>
-            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
-        </div>
-        <p style="color:#718096; text-align:center; padding:20px;">Helikopter listesi ve takibi yakında burada olacak.</p>
+    <div class="page-title">
+        <span>Helikopterler</span>
+        <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
     </div>
+    
+    <div class="menu-grid-2">
+        <div class="menu-btn" onclick="navigateTo('skorskyPage')">Skorsky</div>
+        <div class="menu-btn" onclick="navigateTo('cougarPage')">Cougar</div>
+        <div class="menu-btn" onclick="navigateTo('atakPage')">Atak</div>
+        <div class="menu-btn disabled">Diğer</div>
+    </div>
+</div>
+
+<div id="skorskyPage" class="page-content">
+    <div class="page-title">
+        <span>Skorsky Takip</span>
+        <button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button>
+    </div>
+    <p style="color:#718096; text-align:center; padding:20px;">Skorsky envanter ve arıza takip detayları...</p>
+</div>
+
+<div id="cougarPage" class="page-content">
+    <div class="page-title">
+        <span>Cougar Takip</span>
+        <button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button>
+    </div>
+    <p style="color:#718096; text-align:center; padding:20px;">Cougar envanter ve arıza takip detayları...</p>
+</div>
+
+<div id="atakPage" class="page-content">
+    <div class="page-title">
+        <span>Atak Takip</span>
+        <button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button>
+    </div>
+    <p style="color:#718096; text-align:center; padding:20px;">Atak envanter ve arıza takip detayları...</p>
+</div>
 
     <div id="gsoMalzemelerPage" class="page-content">
         <div class="page-title">
