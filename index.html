@@ -51,7 +51,10 @@
         .btn-del { background: #e53e3e; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .btn-del:hover { background: #c53030; }
 
-        /* Telefonlar için Grid Ayarı */
+        /* GSO İç Alt Menü Stilleri */
+        .gso-sub-section { display: none; margin-top: 15px; animation: fadeIn 0.2s ease; }
+        .gso-sub-section.active { display: block; }
+
         @media (max-width: 400px) {
             .menu-grid { grid-template-columns: repeat(2, 1fr); }
             .menu-grid-2 { grid-template-columns: 1fr; }
@@ -92,7 +95,6 @@
             <span>Skorsky Listesi</span>
             <button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button>
         </div>
-        
         <div id="skorskyListArea">
             <p style="text-align:center; color:#718096; padding:20px;">Helikopter verileri yükleniyor...</p>
         </div>
@@ -103,7 +105,6 @@
             <span id="detailHeliTitle">Helikopter Detay</span>
             <button class="btn-back" onclick="navigateTo('skorskyPage')">Geri</button>
         </div>
-
         <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
             <h4 style="margin-bottom: 8px; color: #2c3e50;">Üzerine Yeni Parça Tak</h4>
             <select id="availablePartsDropdown">
@@ -111,19 +112,12 @@
             </select>
             <button onclick="attachPartToHeli()" class="btn-submit" style="margin-top: 8px; width: 100%;">Parçayı Helikoptere Zimmetle</button>
         </div>
-
         <h4 style="margin-bottom: 10px; color: #2c3e50;">Şu An Üzerinde Takılı Envanterler:</h4>
         <div id="attachedPartsList"></div>
     </div>
 
-    <div id="cougarPage" class="page-content">
-        <div class="page-title"><span>Cougar Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div>
-        <p style="color:#718096; text-align:center; padding:20px;">Cougar entegrasyonu yakında hazır olacak.</p>
-    </div>
-    <div id="atakPage" class="page-content">
-        <div class="page-title"><span>Atak Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div>
-        <p style="color:#718096; text-align:center; padding:20px;">Atak entegrasyonu yakında hazır olacak.</p>
-    </div>
+    <div id="cougarPage" class="page-content"><div class="page-title"><span>Cougar Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Cougar entegrasyonu yakında hazır olacak.</p></div>
+    <div id="atakPage" class="page-content"><div class="page-title"><span>Atak Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Atak entegrasyonu yakında hazır olacak.</p></div>
 
     <div id="gsoMalzemelerPage" class="page-content">
         <div class="page-title">
@@ -131,33 +125,41 @@
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
         
-        <form id="materialForm" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-            <h4 style="margin-bottom: 10px; color: #2c3e50;">Yeni Parça Girişi</h4>
-            <select id="matCategory" style="margin-bottom: 8px;" required>
-                <option value="" disabled selected>Parça Türü Seçiniz...</option>
-                <option value="görüntüleme">Görüntüleme</option>
-                <option value="karşı tedbir">Karşı Tedbir</option>
-                <option value="harici yük">Harici Yük</option>
-            </select>
-            <input type="text" id="matName" placeholder="Parça Adı" required style="margin-bottom: 8px;">
-            <input type="text" id="matSerial" placeholder="Seri Numarası (S/N)" required style="margin-bottom: 8px;">
-            <select id="matStatus" style="margin-bottom: 8px;" required>
-                <option value="Faal" selected>Faal</option>
-                <option value="Gayri Faal">Gayri Faal</option>
-                <option value="Onarımda">Onarımda</option>
-            </select>
-            <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)" style="margin-bottom: 8px;">
-            <button type="submit" class="btn-submit">Parçayı Kaydet</button>
-        </form>
-
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 20px 0 10px 0;">
-            <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
-            <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜLEME</button>
-            <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 10px 5px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">KARŞI TEDBİR</button>
-            <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">HARİCİ YÜK</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
+            <button id="btnSubAdd" onclick="switchGsoSection('add')" style="padding: 12px; font-weight: bold; border-radius: 6px; border: 2px solid #3182ce; background: #3182ce; color: white; cursor: pointer; text-transform: uppercase; font-size: 13px;">Malzeme Ekle / Düzenle</button>
+            <button id="btnSubList" onclick="switchGsoSection('list')" style="padding: 12px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 13px;">Malzeme Listesi</button>
         </div>
 
-        <div id="dynamicMaterialList"></div>
+        <div id="gsoSecAdd" class="gso-sub-section active">
+            <form id="materialForm" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin-bottom: 10px; color: #2c3e50;">Yeni Parça Girişi</h4>
+                <select id="matCategory" style="margin-bottom: 8px;" required>
+                    <option value="" disabled selected>Parça Türü Seçiniz...</option>
+                    <option value="görüntüleme">Görüntüleme</option>
+                    <option value="karşı tedbir">Karşı Tedbir</option>
+                    <option value="harici yük">Harici Yük</option>
+                </select>
+                <input type="text" id="matName" placeholder="Parça Adı" required style="margin-bottom: 8px;">
+                <input type="text" id="matSerial" placeholder="Seri Numarası (S/N)" required style="margin-bottom: 8px;">
+                <select id="matStatus" style="margin-bottom: 8px;" required>
+                    <option value="Faal" selected>Faal</option>
+                    <option value="Gayri Faal">Gayri Faal</option>
+                    <option value="Onarımda">Onarımda</option>
+                </select>
+                <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)" style="margin-bottom: 8px;">
+                <button type="submit" class="btn-submit">Parçayı Kaydet</button>
+            </form>
+        </div>
+
+        <div id="gsoSecList" class="gso-sub-section">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 12px;">
+                <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
+                <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜ</button>
+                <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 8px 3px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">K.TEDBİR</button>
+                <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">H.YÜK</button>
+            </div>
+            <div id="dynamicMaterialList"></div>
+        </div>
     </div>
 
     <div id="katalogPage" class="page-content"><div class="page-title"><span>Katalog</span><button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Katalog dökümanları yakında burada.</p></div>
@@ -188,44 +190,67 @@
     let currentFilter = 'hepsi';
     let cachedParts = [];
     let cachedHelis = [];
-    let activeHeliId = null; // Detayı açılan helikopterin id'si
+    let activeHeliId = null;
 
-    // SİSTEMDE SABİT 4 ADET SKORSKY OLUŞTURMA (Eğer veritabanında yoklarsa otomatik oluşurlar)
+    // Sabit Helikopterleri Başlatma
     const initSkorskyHelis = async () => {
         const defaultHelis = ["SKORSKY-1001", "SKORSKY-1002", "SKORSKY-1003", "SKORSKY-1004"];
         defaultHelis.forEach(async (heliId) => {
-            // setDoc kullanarak doküman id'lerini doğrudan kendimiz sabitliyoruz
             await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId }, { merge: true });
         });
     };
     initSkorskyHelis();
 
-    // 1. VERİ DİNLEME: Tüm Parçaları ve Helikopterleri Canlı İzle
+    // Veri Akışlarını Canlı Dinleme
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
         snapshot.forEach(docSnap => { cachedParts.push({ id: docSnap.id, ...docSnap.data() }); });
-        renderList();       // GSO Malzeme ekranını güncelle
-        renderSkorskyList(); // Skorsky önizleme listesini güncelle
-        updateDropdownAndDetail(); // Eğer detay sayfası açıksa dropdown'ı güncelle
+        renderList();       
+        renderSkorskyList(); 
+        updateDropdownAndDetail(); 
     });
 
     onSnapshot(heliCollection, (snapshot) => {
         cachedHelis = [];
         snapshot.forEach(docSnap => { cachedHelis.push({ id: docSnap.id, ...docSnap.data() }); });
-        renderSkorskyList(); // Helikopter listesini güncelle
+        renderSkorskyList(); 
         updateDropdownAndDetail(); 
     });
 
-    // 2. SKORSKY ÖN İZLEME LİSTESİNİ BASMA (Zimmetli parça bilgileriyle)
+    // PARÇA EKLEME - MÜKERRER SERİ NUMARASI ENGELLEME SİSTEMİ
+    document.getElementById('materialForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const category = document.getElementById('matCategory').value;
+        const name = document.getElementById('matName').value;
+        const serial = document.getElementById('matSerial').value.trim(); // Boşlukları temizle
+        const status = document.getElementById('matStatus').value;
+        const desc = document.getElementById('matDesc').value || "Açıklama yok.";
+
+        // Kritik Kontrol: Aynı S/N'e sahip parça yerel önbellekte var mı?
+        const isDuplicate = cachedParts.some(part => part.serial.toLowerCase() === serial.toLowerCase());
+        
+        if (isDuplicate) {
+            alert(`Kayıt Reddedildi!\n"${serial}" Seri Numaralı (S/N) bir parça sistemde zaten mevcut. Mükerrer kayda izin verilmez.`);
+            return; // Fonksiyonu burada kes, veritabanına ekleme yapma
+        }
+
+        try {
+            await addDoc(gsoCollection, { category, name, serial, status, desc, assignedTo: null });
+            document.getElementById('materialForm').reset();
+            document.getElementById('matStatus').value = "Faal";
+            alert("Parça başarıyla envantere eklendi.");
+            switchGsoSection('list'); // Eklendikten sonra listeyi otomatik aç
+        } catch (error) { alert("Hata: " + error.message); }
+    });
+
+    // Helikopter Listesi Önizleme Ekranda Gösterme
     window.renderSkorskyList = () => {
         const listDiv = document.getElementById('skorskyListArea');
         if (!listDiv) return;
         listDiv.innerHTML = '';
 
         cachedHelis.sort((a, b) => a.id.localeCompare(b.id)).forEach(heli => {
-            // Bu helikoptere bağlı parçaları bul
             const attached = cachedParts.filter(part => part.assignedTo === heli.id);
-            
             let previewText = "Takılı parça bulunmuyor.";
             if (attached.length > 0) {
                 previewText = attached.map(p => `• ${p.name} (S/N: ${p.serial})`).join('<br>');
@@ -236,15 +261,12 @@
             card.onclick = () => openHeliDetail(heli.id);
             card.innerHTML = `
                 <div class="heli-badge">${heli.id}</div>
-                <div class="heli-preview-list">
-                    <strong>Envanter Durumu:</strong><br>${previewText}
-                </div>
+                <div class="heli-preview-list"><strong>Envanter Durumu:</strong><br>${previewText}</div>
             `;
             listDiv.appendChild(card);
         });
     };
 
-    // 3. HELİKOPTER DETAY SAYFASINI AÇMA
     window.openHeliDetail = (heliId) => {
         activeHeliId = heliId;
         document.getElementById('detailHeliTitle').innerText = heliId + " Envanteri";
@@ -252,11 +274,8 @@
         updateDropdownAndDetail();
     };
 
-    // 4. DETAY SAYFASINDAKİ DROPDOWN VE PARÇA LİSTESİNİ YENİLEME
     window.updateDropdownAndDetail = () => {
         if (activeHeliId === null) return;
-
-        // Üzerinde takılı olanları listele
         const attachedListDiv = document.getElementById('attachedPartsList');
         attachedListDiv.innerHTML = '';
         const attached = cachedParts.filter(part => part.assignedTo === activeHeliId);
@@ -278,10 +297,8 @@
             });
         }
 
-        // Dropdown'ı doldur (Sadece durumu "Faal" olan ve hiçbir helikoptere takılı olmayanlar)
         const dropdown = document.getElementById('availablePartsDropdown');
         dropdown.innerHTML = '<option value="" disabled selected>Faal Parçalardan Seçiniz...</option>';
-        
         const available = cachedParts.filter(part => part.status === 'Faal' && !part.assignedTo);
         available.forEach(part => {
             const opt = document.createElement('option');
@@ -291,55 +308,21 @@
         });
     };
 
-    // 5. HELİKOPTERE PARÇA TAKMA (KAYDETME İŞLEMİ)
     window.attachPartToHeli = async () => {
         const selectBox = document.getElementById('availablePartsDropdown');
         const partId = selectBox.value;
-        if (!partId || !activeHeliId) {
-            alert("Lütfen listeden faal bir parça seçin.");
-            return;
-        }
-
+        if (!partId || !activeHeliId) { alert("Lütfen listeden faal bir parça seçin."); return; }
         try {
-            // Parçanın dokümanına hangi helikoptere takıldığını (assignedTo) yazıyoruz.
-            // Firebase'de kaydet butonu yerine anlık updateDoc kullanmak her zaman veri kaybını önler.
-            await updateDoc(doc(db, "gso_envanter", partId), {
-                assignedTo: activeHeliId
-            });
-            selectBox.value = ""; // Seçimi sıfırla
-        } catch (error) {
-            alert("Hata: " + error.message);
-        }
-    };
-
-    // 6. HELİKOPTERDEN PARÇA SÖKME
-    window.detachPart = async (partId) => {
-        if (confirm("Bu parçayı helikopterden sökmek istediğinize emin misiniz? Parça genel depoya dönecektir.")) {
-            try {
-                // assignedTo alanını tamamen kaldırarak veya silerek parçayı boşa çıkarıyoruz
-                await updateDoc(doc(db, "gso_envanter", partId), {
-                    assignedTo: null
-                });
-            } catch (error) {
-                alert("Hata: " + error.message);
-            }
-        }
-    };
-
-    // =============== ESKİ MALZEME EKLEME VE LİSTELEME FONKSİYONLARI ===============
-    document.getElementById('materialForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const category = document.getElementById('matCategory').value;
-        const name = document.getElementById('matName').value;
-        const serial = document.getElementById('matSerial').value;
-        const status = document.getElementById('matStatus').value;
-        const desc = document.getElementById('matDesc').value || "Açıklama yok.";
-        try {
-            await addDoc(gsoCollection, { category, name, serial, status, desc, assignedTo: null });
-            document.getElementById('materialForm').reset();
-            document.getElementById('matStatus').value = "Faal";
+            await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: activeHeliId });
+            selectBox.value = "";
         } catch (error) { alert("Hata: " + error.message); }
-    });
+    };
+
+    window.detachPart = async (partId) => {
+        if (confirm("Bu parçayı helikopterden sökmek istediğinize emin misiniz?")) {
+            try { await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: null }); } catch (error) { alert("Hata: " + error.message); }
+        }
+    };
 
     window.renderList = () => {
         const listDiv = document.getElementById('dynamicMaterialList');
@@ -348,7 +331,7 @@
         const filteredData = cachedParts.filter(item => currentFilter === 'hepsi' || item.category === currentFilter);
 
         if (filteredData.length === 0) {
-            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Bu filtreye uygun kayıtlı parça bulunamadı.</p>`;
+            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Kayıtlı parça bulunamadı.</p>`;
             return;
         }
 
@@ -363,8 +346,7 @@
             if (item.status === 'Gayri Faal') statusColor = '#c53030'; 
             if (item.status === 'Onarımda') statusColor = '#dd6b20'; 
 
-            // Eğer bir helikoptere takılıysa bilgisini göster
-            const locationText = item.assignedTo ? `<span style="background:#3182ce; color:white; padding:20px 6px; font-size:11px; border-radius:4px; font-weight:bold; margin-left:6px;">${item.assignedTo}'DE TAKILI</span>` : '';
+            const locationText = item.assignedTo ? `<span style="background:#3182ce; color:white; padding:2px 6px; font-size:11px; border-radius:4px; font-weight:bold; margin-left:6px;">${item.assignedTo}'DE TAKILI</span>` : '';
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -416,6 +398,31 @@
         document.querySelectorAll('.page-content').forEach(page => { page.classList.remove('active'); });
         document.getElementById(pageId).classList.add('active');
     }
+
+    // GSO Sayfası Alt Bölüm Geçiş Yönetimi (Ekleme Formu / Liste)
+    function switchGsoSection(section) {
+        document.getElementById('gsoSecAdd').classList.remove('active');
+        document.getElementById('gsoSecList').classList.remove('active');
+        document.getElementById('btnSubAdd').style.background = 'white';
+        document.getElementById('btnSubAdd').style.color = '#4a5568';
+        document.getElementById('btnSubAdd').style.borderColor = '#cbd5e0';
+        document.getElementById('btnSubList').style.background = 'white';
+        document.getElementById('btnSubList').style.color = '#4a5568';
+        document.getElementById('btnSubList').style.borderColor = '#cbd5e0';
+
+        if (section === 'add') {
+            document.getElementById('gsoSecAdd').classList.add('active');
+            document.getElementById('btnSubAdd').style.background = '#3182ce';
+            document.getElementById('btnSubAdd').style.color = 'white';
+            document.getElementById('btnSubAdd').style.borderColor = '#3182ce';
+        } else {
+            document.getElementById('gsoSecList').classList.add('active');
+            document.getElementById('btnSubList').style.background = '#3182ce';
+            document.getElementById('btnSubList').style.color = 'white';
+            document.getElementById('btnSubList').style.borderColor = '#3182ce';
+        }
+    }
+
     if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(err => console.log(err)); }
 </script>
 
