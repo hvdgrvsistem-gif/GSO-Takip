@@ -134,7 +134,7 @@
 
         <div class="menu-grid-2">
             <div class="menu-btn" onclick="openHeliFilterGroup('Sikorsky')">Sikorsky Modelleri</div>
-            <div class="menu-btn" onclick="openHeliFilterGroup('Yerli')">Yerli / Diğer Tasarımlar</div>
+            <div class="menu-btn" onclick="openHeliFilterGroup('Diger')">Diğer Helikopterler</div>
         </div>
     </div>
 
@@ -233,7 +233,7 @@
             <button id="btnCatPayload" onclick="switchCatalogTab('payload')" class="sub-tab-btn">Harici Yük</button>
         </div>
         <div id="catSecView" class="sub-section active">
-            <div class="catalog-card"><h4>FLIR Sitemi</h4><p>Gece ve gündüz kızılötesi termal hedef tespiti sistemidir.</p></div>
+            <div class="catalog-card"><h4>FLIR Sistemi</h4><p>Gece ve gündüz kızılötesi termal hedef tespiti sistemidir.</p></div>
         </div>
         <div id="catSecCounter" class="sub-section">
             <div class="catalog-card"><h4>Chaff / Flare</h4><p>Füzelere karşı aldatma sistemidir.</p></div>
@@ -293,7 +293,7 @@
                     <option value="" disabled selected>Hava Aracı Türü Seçiniz...</option>
                     <option value="Sikorsky S70-A">Sikorsky S70-A</option>
                     <option value="Sikorsky S70-İ">Sikorsky S70-İ</option>
-                    <option value="Sikorsky S70-T">Sikorsky S70-T</option>
+                    <option value="S70-T">Sikorsky S70-T</option>
                     <option value="Bell-429">Bell-429</option>
                     <option value="Atak-129">Atak-129</option>
                     <option value="Gökbey">Gökbey</option>
@@ -352,6 +352,8 @@
     let currentHeliFilterType = 'Sikorsky'; 
     let originPage = 'skorskyPage'; 
 
+    // YENİ GÜNCELLEME: UYGULAMA BAŞLANGICINDA YÜKLENEN DEFAULT VERİ FONKSİYONU TAMAMEN SİLİNDİ.
+
     // Firebase Canlı Akış Dinleyicileri
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
@@ -360,7 +362,7 @@
         renderSkorskyList(); 
         updateDropdownAndDetail();
         renderFleetHeliList();
-        updateHqDropdown(); // Başkanlık listesini her an taze tut
+        updateHqDropdown(); 
     });
 
     onSnapshot(heliCollection, (snapshot) => {
@@ -369,7 +371,7 @@
         renderSkorskyList(); 
         updateDropdownAndDetail();
         renderFleetHeliList();
-        updateHqDropdown(); // Başkanlık listesini her an taze tut
+        updateHqDropdown(); 
     });
 
     const logQuery = query(logsCollection, orderBy("timestamp", "desc"));
@@ -385,7 +387,7 @@
         } catch (e) { console.error("Log yazma hatası:", e); }
     };
 
-    // YENİ İSTEK: HAVA ARAÇLARI SEKMESİ İÇİNDEN YENİ HELİKOPTER EKLEME
+    // HAVA ARAÇLARI SEKMESİ İÇİNDEN YENİ HELİKOPTER EKLEME
     window.addHeliDirectly = async () => {
         const input = document.getElementById('directHeliNameInput');
         const typeSelect = document.getElementById('directHeliTypeSelect');
@@ -409,9 +411,10 @@
         } catch(e) { alert("Hata: " + e.message); }
     };
 
+    // GÜNCELLEME: Sikorsky ve Diger Olarak Filtre Yönetimi
     window.openHeliFilterGroup = (groupType) => {
         currentHeliFilterType = groupType;
-        document.getElementById('heliGroupTitle').innerText = groupType === 'Sikorsky' ? "Sikorsky Modelleri" : "Yerli / Diğer Filolar";
+        document.getElementById('heliGroupTitle').innerText = groupType === 'Sikorsky' ? "Sikorsky Modelleri" : "Diğer Helikopterler";
         navigateTo('skorskyPage');
         renderSkorskyList();
     };
@@ -428,6 +431,7 @@
 
         let filteredHelis = cachedHelis.filter(h => {
             const isSikorsky = h.type && h.type.includes('Sikorsky');
+            // 'Sikorsky' seçildiyse isSikorsky olanlar, 'Diger' seçildiyse olmayanlar süzülür
             return currentHeliFilterType === 'Sikorsky' ? isSikorsky : !isSikorsky;
         });
 
@@ -629,7 +633,6 @@
         activeFleetName = fleetName;
         document.getElementById('fleetDetailTitle').innerText = fleetName + " Hava Filosu";
         
-        // Eğer Ankara-Başkanlık açıldıysa özel transfer panelini göster
         const xferPanel = document.getElementById('hqTransferPanel');
         if (fleetName === 'Ankara-Başkanlık') {
             xferPanel.style.display = 'block';
@@ -642,7 +645,6 @@
         renderFleetHeliList();
     };
 
-    // Başkanlıkta bekleyen boştaki araçların dropdown listesini tazeleyen metod
     window.updateHqDropdown = () => {
         const dropdown = document.getElementById('hqTransferHeliSelect');
         if (!dropdown) return;
@@ -657,7 +659,6 @@
         });
     };
 
-    // YENİ İSTEK: BAŞKANLIKTAN TAŞRAYA SEVK ETME EMRETMESİ
     window.executeHqTransfer = async () => {
         const heliSelect = document.getElementById('hqTransferHeliSelect');
         const targetSelect = document.getElementById('hqTransferTargetFleetSelect');
@@ -693,8 +694,6 @@
             card.className = 'item-card';
             card.style.minHeight = '100px';
             
-            // YENİ İSTEK: SİLİNDİĞİNDE BAŞKANLIĞA GÖNDERME MANTIĞI
-            // Eğer zaten Ankara-Başkanlık'taysa "Tamamen Sil" mantığı çalışsın, Taşrada ise "Başkanlığa Çek" çalışsın.
             const isHq = activeFleetName === 'Ankara-Başkanlık';
             const deleteBtnText = isHq ? "Kayıt Sil" : "Merkeze Çek";
 
@@ -727,15 +726,32 @@
         } catch(e) { alert("Hata: " + e.message); }
     };
 
-    // YENİ İSTEK MANTIĞI: BİR FİLODAN KALDIRILAN ARAÇ ANKARA-BAŞKANLIĞA GÖNDERİLİR
+    // YENİ GÜNCELLEME: HELİKOPTER SİLİNDİĞİNDE VEYA MERKEZE ÇEKİLDİĞİNDE MALZEMELERİ SERBEST BIRAKMA MANTIĞI
     window.removeHeliFromFleet = async (heliId, isHq) => {
+        // O helikoptere takılı olan tüm parçaları bul
+        const attachedParts = cachedParts.filter(part => part.assignedTo === heliId);
+
         if (isHq) {
-            if (confirm(`${heliId} nolu aracı sistemden TAMAMEN silmek istediğinize emin misiniz?`)) {
-                try { await deleteDoc(doc(db, "skorsky_helikopterler", heliId)); } catch(e) { alert(e.message); }
+            if (confirm(`${heliId} nolu aracı sistemden TAMAMEN silmek istediğinize emin misiniz? (Üzerindeki tüm malzemeler sökülüp boşa çıkacaktır!)`)) {
+                try { 
+                    // 1. Önce üzerindeki parçaları serbest bırak
+                    for (const part of attachedParts) {
+                        await updateDoc(doc(db, "gso_envanter", part.id), { assignedTo: null });
+                        await createLog(part.name, part.serial, "Söküldü", `Helikopter (${heliId}) silindiği için parça boşa çıktı.`);
+                    }
+                    // 2. Ardından helikopter kaydını tamamen sil
+                    await deleteDoc(doc(db, "skorsky_helikopterler", heliId)); 
+                } catch(e) { alert(e.message); }
             }
         } else {
-            if (confirm(`${heliId} nolu aracı ${activeFleetName} filosundan söküp Ankara-Başkanlık merkez üssüne geri çekmek istiyor musunuz?`)) {
+            if (confirm(`${heliId} nolu aracı ${activeFleetName} filosundan söküp Ankara-Başkanlık merkez üssüne geri çekmek istiyor musunuz? (Üzerindeki tüm malzemeler otomatik sökülecektir.)`)) {
                 try {
+                    // 1. Üzerindeki parçaları sök ve boşa çıkar
+                    for (const part of attachedParts) {
+                        await updateDoc(doc(db, "gso_envanter", part.id), { assignedTo: null });
+                        await createLog(part.name, part.serial, "Söküldü", `Araç merkeze çekildiği için parça üzerinden söküldü.`);
+                    }
+                    // 2. Helikopteri Ankara-Başkanlık'a taşı
                     await updateDoc(doc(db, "skorsky_helikopterler", heliId), { fleet: "Ankara-Başkanlık" });
                     await createLog("GERİ ÇEKME", heliId, "Mıntıka", `${activeFleetName} filosundan Ankara Merkez üssüne geri çağrıldı.`);
                 } catch(e) { alert("Hata: " + e.message); }
