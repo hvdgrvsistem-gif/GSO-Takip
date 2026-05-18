@@ -8,70 +8,79 @@
     <meta name="theme-color" content="#1a252f">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
-        body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; }
+        body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 10px; }
         
-        .app-container { width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); overflow: hidden; padding: 20px; }
+        .app-container { width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); overflow: hidden; padding: 15px; }
         
         /* Ana Başlık Alanı */
-        .header-banner { background: #1a252f; color: white; padding: 25px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+        .header-banner { background: #1a252f; color: white; padding: 20px; border-radius: 8px; text-align: center; font-size: 22px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase; }
         
         /* Buton Izgaraları */
-        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 10px; }
-        .menu-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+        .menu-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 10px; }
+        
+        /* İKİ SÜTUNLU LİSTE DÜZENLERİ (Mobil Ekranlar İçin) */
+        .two-column-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
         
         /* Menü Butonları */
-        .menu-btn { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 20px 10px; font-size: 13px; font-weight: bold; color: #2c3e50; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; min-height: 90px; text-transform: uppercase; }
+        .menu-btn { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 15px 8px; font-size: 12px; font-weight: bold; color: #2c3e50; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; min-height: 80px; text-transform: uppercase; }
         .menu-btn:hover { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; transform: translateY(-2px); }
         
-        /* Kart Tasarımları */
-        .heli-card { background: #ffffff; border: 2px solid #cbd5e0; border-radius: 10px; padding: 15px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; }
+        /* Helikopter Kart Tasarımı (2 Sütuna Göre Küçültüldü) */
+        .heli-card { background: #ffffff; border: 2px solid #cbd5e0; border-radius: 8px; padding: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: space-between; min-height: 110px; }
         .heli-card:hover { border-color: #3182ce; background: #f7fafc; transform: translateY(-2px); }
-        .heli-badge { display: inline-block; background: #2d3748; color: white; padding: 4px 10px; font-weight: bold; border-radius: 5px; font-size: 14px; margin-bottom: 8px; }
-        .heli-preview-list { font-size: 13px; color: #4a5568; line-height: 1.5; padding-left: 5px; border-left: 3px solid #3182ce; }
+        .heli-badge { display: inline-block; background: #2d3748; color: white; padding: 3px 6px; font-weight: bold; border-radius: 4px; font-size: 12px; margin-bottom: 4px; width: fit-content; text-align: center; }
+        .heli-type-badge { display: inline-block; background: #3182ce; color: white; padding: 2px 6px; font-size: 10px; font-weight: bold; border-radius: 4px; margin-bottom: 6px; width: fit-content; }
+        .heli-preview-list { font-size: 11px; color: #4a5568; line-height: 1.4; padding-left: 4px; border-left: 2px solid #3182ce; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
         /* Sayfa Bölümleri */
         .page-content { display: none; animation: fadeIn 0.3s ease; }
         .page-content.active { display: block; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
         /* İç Sayfa Tasarımları */
-        .page-title { font-size: 20px; color: #1a252f; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #3182ce; display: flex; justify-content: space-between; align-items: center; }
-        .btn-back { background: #718096; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .page-title { font-size: 18px; color: #1a252f; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #3182ce; display: flex; justify-content: space-between; align-items: center; }
+        .btn-back { background: #718096; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .btn-back:hover { background: #4a5568; }
 
         /* Form ve Genel Yapılar */
-        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        input, select { padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; width: 100%; background: white; }
-        .btn-submit { background: #3182ce; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; cursor: pointer; font-weight: bold; text-align: center; }
+        form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 14px; width: 100%; background: white; }
+        .btn-submit { background: #3182ce; color: white; border: none; padding: 10px; border-radius: 6px; font-size: 14px; cursor: pointer; font-weight: bold; text-align: center; }
         .btn-submit:hover { background: #2b6cb0; }
         
-        .item-card { display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; background: #f8fafc; }
-        .btn-del { background: #e53e3e; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+        /* 2 Sütunlu Malzeme Kartı Tasarımı */
+        .item-card { display: flex; flex-direction: column; justify-content: space-between; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; background: #f8fafc; min-height: 140px; gap: 6px; }
+        .btn-del { background: #e53e3e; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; width: fit-content; align-self: flex-end; }
         .btn-del:hover { background: #c53030; }
 
         /* Alt Menü Sekme Stilleri */
-        .sub-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .sub-tab-btn { padding: 12px 5px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 12px; text-align: center; }
+        .sub-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+        .sub-tab-btn { padding: 10px 4px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 11px; text-align: center; }
         .sub-tab-btn.active { background: #3182ce; color: white; border-color: #3182ce; }
         
         .sub-section { display: none; animation: fadeIn 0.2s ease; }
         .sub-section.active { display: block; }
 
-        .catalog-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
-        .catalog-card h4 { color: #2c3e50; margin-bottom: 6px; font-size: 16px; border-bottom: 1px solid #edf2f7; padding-bottom: 4px; }
-        .catalog-card p { font-size: 13px; color: #4a5568; line-height: 1.5; }
-        .catalog-card ul { margin-top: 6px; padding-left: 20px; font-size: 13px; color: #4a5568; }
+        .catalog-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+        .catalog-card h4 { color: #2c3e50; margin-bottom: 4px; font-size: 15px; border-bottom: 1px solid #edf2f7; padding-bottom: 2px; }
+        .catalog-card p { font-size: 12px; color: #4a5568; line-height: 1.4; }
 
         /* Gelişmiş GSO Filtreleri CSS */
-        .adv-filter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; background: #edf2f7; padding: 8px; border-radius: 8px; margin-bottom: 12px; }
-        .adv-filter-btn { padding: 8px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 6px; cursor: pointer; background: white; color: #4a5568; text-align: center; }
+        .adv-filter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; background: #edf2f7; padding: 6px; border-radius: 6px; margin-bottom: 10px; }
+        .adv-filter-btn { padding: 6px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #4a5568; text-align: center; }
         .adv-filter-btn.active { background: #4a5568; color: white; border-color: #4a5568; }
 
         /* Log Listesi Stili */
-        .log-item { background: #f8fafc; border-left: 4px solid #4a5568; padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .log-item { background: #f8fafc; border-left: 4px solid #4a5568; padding: 8px; margin-bottom: 6px; border-radius: 0 6px 6px 0; font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
         .log-item.takildi { border-left-color: #2f855a; }
         .log-item.sokuldu { border-left-color: #c53030; }
+
+        @media (max-width: 400px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+            .menu-grid-2 { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -81,7 +90,7 @@
     <div id="mainMenu" class="page-content active">
         <div class="header-banner">GSO TAKİP</div>
         <div class="menu-grid">
-            <div class="menu-btn" onclick="navigateTo('helikopterlerPage')">Helikopterler</div>
+            <div class="menu-btn" onclick="navigateTo('helikopterlerPage')">Hava Araçları</div>
             <div class="menu-btn" onclick="navigateTo('gsoMalzemelerPage')">GSO Malzemeler</div>
             <div class="menu-btn" onclick="navigateTo('katalogPage')">Katalog</div>
             <div class="menu-btn" onclick="navigateTo('filolarPage')">Filolar</div>
@@ -92,45 +101,40 @@
 
     <div id="helikopterlerPage" class="page-content">
         <div class="page-title">
-            <span>Helikopterler</span>
+            <span>Envanter Grupları</span>
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
         <div class="menu-grid-2">
-            <div class="menu-btn" onclick="navigateTo('skorskyPage')">Skorsky</div>
-            <div class="menu-btn" onclick="navigateTo('cougarPage')">Cougar</div>
-            <div class="menu-btn" onclick="navigateTo('atakPage')">Atak</div>
-            <div class="menu-btn" style="background: #f7fafc; color: #a0aec0; border-color: #edf2f7; cursor: not-allowed;">Diğer</div>
+            <div class="menu-btn" onclick="openHeliFilterGroup('Sikorsky')">Sikorsky Modelleri</div>
+            <div class="menu-btn" onclick="openHeliFilterGroup('Yerli')">Yerli / Diğer Tasarımlar</div>
         </div>
     </div>
 
     <div id="skorskyPage" class="page-content">
         <div class="page-title">
-            <span>Skorsky Listesi</span>
+            <span id="heliGroupTitle">Hava Araçları</span>
             <button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button>
         </div>
-        <div id="skorskyListArea">
-            <p style="text-align:center; color:#718096; padding:20px;">Helikopter verileri yükleniyor...</p>
+        <div id="skorskyListArea" class="two-column-grid">
+            <p style="text-align:center; color:#718096; padding:20px; grid-column: span 2;">Veriler yükleniyor...</p>
         </div>
     </div>
 
     <div id="heliDetailPage" class="page-content">
         <div class="page-title">
-            <span id="detailHeliTitle">Helikopter Detay</span>
+            <span id="detailHeliTitle">Hava Aracı Detay</span>
             <button class="btn-back" onclick="handleHeliDetailBack()">Geri</button>
         </div>
-        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
-            <h4 style="margin-bottom: 8px; color: #2c3e50;">Üzerine Yeni Parça Tak</h4>
-            <select id="availablePartsDropdown">
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+            <h4 style="margin-bottom: 6px; color: #2c3e50; font-size:13px;">Üzerine Yeni Parça Tak</h4>
+            <select id="availablePartsDropdown" style="padding:8px; font-size:13px;">
                 <option value="" disabled selected>Faal Parçalardan Seçiniz...</option>
             </select>
-            <button onclick="attachPartToHeli()" class="btn-submit" style="margin-top: 8px; width: 100%;">Parçayı Helikoptere Zimmetle</button>
+            <button onclick="attachPartToHeli()" class="btn-submit" style="margin-top: 6px; width: 100%; padding:8px; font-size:13px;">Parçayı Montajla</button>
         </div>
-        <h4 style="margin-bottom: 10px; color: #2c3e50;">Şu An Üzerinde Takılı Envanterler:</h4>
-        <div id="attachedPartsList"></div>
+        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size:14px;">Üzerinde Takılı Parçalar:</h4>
+        <div id="attachedPartsList" class="two-column-grid"></div>
     </div>
-
-    <div id="cougarPage" class="page-content"><div class="page-title"><span>Cougar Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Cougar entegrasyonu yakında hazır olacak.</p></div>
-    <div id="atakPage" class="page-content"><div class="page-title"><span>Atak Takip</span><button class="btn-back" onclick="navigateTo('helikopterlerPage')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Atak entegrasyonu yakında hazır olacak.</p></div>
 
     <div id="gsoMalzemelerPage" class="page-content">
         <div class="page-title">
@@ -138,28 +142,28 @@
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
         
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button id="btnSubAdd" onclick="switchGsoSection('add')" class="sub-tab-btn active">Malzeme Ekle / Düzenle</button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+            <button id="btnSubAdd" onclick="switchGsoSection('add')" class="sub-tab-btn active">Malzeme Ekle</button>
             <button id="btnSubList" onclick="switchGsoSection('list')" class="sub-tab-btn">Malzeme Listesi</button>
         </div>
 
         <div id="gsoSecAdd" class="sub-section active">
-            <form id="materialForm" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                <h4 style="margin-bottom: 10px; color: #2c3e50;">Yeni Parça Girişi</h4>
-                <select id="matCategory" style="margin-bottom: 8px;" required>
+            <form id="materialForm" style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                <h4 style="margin-bottom: 6px; color: #2c3e50; font-size:14px;">Yeni Parça Girişi</h4>
+                <select id="matCategory" required>
                     <option value="" disabled selected>Parça Türü Seçiniz...</option>
                     <option value="görüntüleme">Görüntüleme</option>
                     <option value="karşı tedbir">Karşı Tedbir</option>
                     <option value="harici yük">Harici Yük</option>
                 </select>
-                <input type="text" id="matName" placeholder="Parça Adı" required style="margin-bottom: 8px;">
-                <input type="text" id="matSerial" placeholder="Seri Numarası (S/N)" required style="margin-bottom: 8px;">
-                <select id="matStatus" style="margin-bottom: 8px;" required>
+                <input type="text" id="matName" placeholder="Parça Adı" required>
+                <input type="text" id="matSerial" placeholder="Seri Numarası (S/N)" required>
+                <select id="matStatus" required>
                     <option value="Faal" selected>Faal</option>
                     <option value="Gayri Faal">Gayri Faal</option>
                     <option value="Onarımda">Onarımda</option>
                 </select>
-                <select id="matLocation" style="margin-bottom: 8px;" required>
+                <select id="matLocation" required>
                     <option value="İstanbul">İstanbul Filosu</option>
                     <option value="İzmir">İzmir Filosu</option>
                     <option value="Antalya">Antalya Filosu</option>
@@ -167,25 +171,25 @@
                     <option value="Diyarbakır">Diyarbakır Filosu</option>
                     <option value="Van">Van Filosu</option>
                 </select>
-                <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)" style="margin-bottom: 8px;">
+                <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)">
                 <button type="submit" class="btn-submit">Parçayı Kaydet</button>
             </form>
         </div>
 
         <div id="gsoSecList" class="sub-section">
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 6px;">
-                <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
-                <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜ</button>
-                <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 8px 3px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">K.TEDBİR</button>
-                <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">H.YÜK</button>
+                <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 6px 2px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
+                <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 6px 2px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜ</button>
+                <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 6px 2px; font-size: 9px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">K.TEDBİR</button>
+                <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 6px 2px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">H.YÜK</button>
             </div>
             <div class="adv-filter-grid">
                 <button onclick="setAdvancedFilter('allStatus')" id="adv-allStatus" class="adv-filter-btn active">TÜM DURUMLAR</button>
-                <button onclick="setAdvancedFilter('unattached')" id="adv-unattached" class="adv-filter-btn">TAKILI OLMAYANLAR</button>
+                <button onclick="setAdvancedFilter('unattached')" id="adv-unattached" class="adv-filter-btn">TAKILI OLMAYAN</button>
                 <button onclick="setAdvancedFilter('faal')" id="adv-faal" class="adv-filter-btn">SADECE FAAL</button>
                 <button onclick="setAdvancedFilter('arizali')" id="adv-arizali" class="adv-filter-btn">SADECE ARIZALI</button>
             </div>
-            <div id="dynamicMaterialList"></div>
+            <div id="dynamicMaterialList" class="two-column-grid"></div>
         </div>
     </div>
 
@@ -200,20 +204,20 @@
             <button id="btnCatPayload" onclick="switchCatalogTab('payload')" class="sub-tab-btn">Harici Yük</button>
         </div>
         <div id="catSecView" class="sub-section active">
-            <div class="catalog-card"><h4>FLIR (Termal Kamera Sistemi)</h4><p>Gece ve gündüz şartlarında hedef tespiti ve teşhisi yapan elektro-optik kızılötesi sistemdir.</p></div>
-            <div class="catalog-card"><h4>NVG (Gece Görüş Gözlüğü)</h4><p>Ortamdaki ışığı güçlendirerek pilotlara görsel referans sağlayan sistemdir.</p></div>
+            <div class="catalog-card"><h4>FLIR Sitemi</h4><p>Gece ve gündüz kızılötesi termal hedef tespiti ve keşif sistemidir.</p></div>
+            <div class="catalog-card"><h4>NVG Gözlük</h4><p>Ortam ışık seviyesini artırarak gece operasyonu sağlayan sistemdir.</p></div>
         </div>
         <div id="catSecCounter" class="sub-section">
-            <div class="catalog-card"><h4>Chaff / Flare Dispenser</h4><p>Radar ve ısı güdümlü füzelere karşı fırlatılan savunma sistemidir.</p></div>
+            <div class="catalog-card"><h4>Chaff / Flare</h4><p>Radar ve ısı güdümlü füzelere karşı fırlatılan aktif aldatma tertibatıdır.</p></div>
         </div>
         <div id="catSecPayload" class="sub-section">
-            <div class="catalog-card"><h4>Harici Yakıt Tankı</h4><p>Helikopterin menzilini ve havada kalış süresini artıran sistemdir.</p></div>
+            <div class="catalog-card"><h4>Harici Yakıt Tankı</h4><p>Menzil ve havada kalış süresini uzatan pilon monteli ek yakıt sistemidir.</p></div>
         </div>
     </div>
 
     <div id="filolarPage" class="page-content">
         <div class="page-title">
-            <span>Hava Filoları Üsleri</span>
+            <span>Hava Filoları</span>
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
         <div class="menu-grid-2" id="fleetGridArea">
@@ -232,14 +236,23 @@
             <button class="btn-back" onclick="navigateTo('filolarPage')">Geri</button>
         </div>
         <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
-            <h4 style="margin-bottom: 6px; color: #2c3e50; font-size:14px;">Filoya Yeni Helikopter Ekle</h4>
-            <div style="display:flex; gap:6px;">
-                <input type="text" id="newHeliNameInput" placeholder="Örn: SKORSKY-1005" style="padding:8px; font-size:14px;">
-                <button onclick="addNewHeliToFleet()" class="btn-submit" style="padding:0 15px; font-size:13px;">Ekle</button>
+            <h4 style="margin-bottom: 6px; color: #2c3e50; font-size:13px;">Filoya Yeni Hava Aracı Konuşlandır</h4>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+                <input type="text" id="newHeliNameInput" placeholder="Kuyruk No Örn: 1005" style="padding:8px; font-size:14px;">
+                <select id="newHeliTypeSelect" style="padding:8px; font-size:14px;">
+                    <option value="" disabled selected>Hava Aracı Türü Seçiniz...</option>
+                    <option value="Sikorsky S70-A">Sikorsky S70-A</option>
+                    <option value="Sikorsky S70-İ">Sikorsky S70-İ</option>
+                    <option value="Sikorsky S70-T">Sikorsky S70-T</option>
+                    <option value="Bell-429">Bell-429</option>
+                    <option value="Atak-129">Atak-129</option>
+                    <option value="Gökbey">Gökbey</option>
+                </select>
+                <button onclick="addNewHeliToFleet()" class="btn-submit" style="padding:8px; font-size:13px;">Kayıt Aç ve Ekle</button>
             </div>
         </div>
-        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size:15px;">Filoda Kayıtlı Helikopterler:</h4>
-        <div id="fleetHeliList"></div>
+        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size:14px;">Filodaki Araçlar:</h4>
+        <div id="fleetHeliList" class="two-column-grid"></div>
     </div>
 
     <div id="historyPage" class="page-content">
@@ -247,8 +260,8 @@
             <span>İşlem Geçmişi Logs</span>
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
-        <div style="text-align: right; margin-bottom: 12px;">
-            <button onclick="clearAllLogs()" class="btn-del" style="background:#4a5568;">Tüm Geçmişi Temizle</button>
+        <div style="text-align: right; margin-bottom: 10px;">
+            <button onclick="clearAllLogs()" class="btn-del" style="background:#4a5568;">Tümünü Temizle</button>
         </div>
         <div id="logHistoryList">
             <p style="text-align:center; color:#718096; padding:20px;">Kayıt bulunamadı.</p>
@@ -279,29 +292,30 @@
     const logsCollection = collection(db, "islem_loglari");
 
     let currentFilter = 'hepsi';
-    let advFilter = 'allStatus'; // allStatus, unattached, faal, arizali
+    let advFilter = 'allStatus'; 
     let cachedParts = [];
     let cachedHelis = [];
     let cachedLogs = [];
     let activeHeliId = null;
     let activeFleetName = null;
-    let originPage = 'skorskyPage'; // Detay ekranı dönüş yönetimi için
+    let currentHeliFilterType = 'Sikorsky'; // 'Sikorsky' veya 'Yerli' gruplama filtresi
+    let originPage = 'skorskyPage'; 
 
-    // Helikopterleri İlk Açılışta Atama
-    const initSkorskyHelis = async () => {
+    // Varsayılan İlk Helikopter Şablonlarını Model ve Filolarıyla Oluşturma
+    const initDefaultHelis = async () => {
         const defaultHelis = [
-            { id: "SKORSKY-1001", fleet: "İstanbul" },
-            { id: "SKORSKY-1002", fleet: "İzmir" },
-            { id: "SKORSKY-1003", fleet: "Antalya" },
-            { id: "SKORSKY-1004", fleet: "Diyarbakır" }
+            { id: "1001", type: "Sikorsky S70-A", fleet: "İstanbul" },
+            { id: "1002", type: "Sikorsky S70-İ", fleet: "İzmir" },
+            { id: "1003", type: "Atak-129", fleet: "Diyarbakır" },
+            { id: "1004", type: "Gökbey", fleet: "Van" }
         ];
         defaultHelis.forEach(async (item) => {
-            await setDoc(doc(db, "skorsky_helikopterler", item.id), { name: item.id, fleet: item.fleet }, { merge: true });
+            await setDoc(doc(db, "skorsky_helikopterler", item.id), { name: item.id, type: item.type, fleet: item.fleet }, { merge: true });
         });
     };
-    initSkorskyHelis();
+    initDefaultHelis();
 
-    // Firebase Canlı Akışları
+    // Firebase Canlı Akış Dinleyicileri
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
         snapshot.forEach(docSnap => { cachedParts.push({ id: docSnap.id, ...docSnap.data() }); });
@@ -319,7 +333,6 @@
         renderFleetHeliList();
     });
 
-    // Log akışı - Tarihe göre tersten listeleme
     const logQuery = query(logsCollection, orderBy("timestamp", "desc"));
     onSnapshot(logQuery, (snapshot) => {
         cachedLogs = [];
@@ -327,44 +340,59 @@
         renderLogHistory();
     });
 
-    // Log Ekleme Fonksiyonu
     const createLog = async (partName, serial, action, detail) => {
         try {
-            await addDoc(logsCollection, {
-                partName,
-                serial,
-                action, // 'Takıldı' veya 'Söküldü'
-                detail,
-                timestamp: serverTimestamp()
-            });
-        } catch (e) { console.error("Log hatası:", e); }
+            await addDoc(logsCollection, { partName, serial, action, detail, timestamp: serverTimestamp() });
+        } catch (e) { console.error("Log yazma hatası:", e); }
     };
 
-    // Helikopter Listesini Ekrana Basma
+    // Hava Araçları Gruplama Seçimi (Sikorsky / Yerli modeller)
+    window.openHeliFilterGroup = (groupType) => {
+        currentHeliFilterType = groupType;
+        document.getElementById('heliGroupTitle').innerText = groupType === 'Sikorsky' ? "Sikorsky Modelleri" : "Yerli / Diğer Filolar";
+        navigateTo('skorskyPage');
+        renderSkorskyList();
+    };
+
+    // 2 SÜTUNLU HELİKOPTER LİSTESİ RENDER METODU
     window.renderSkorskyList = () => {
         const listDiv = document.getElementById('skorskyListArea');
         if (!listDiv) return;
         listDiv.innerHTML = '';
 
         if(cachedHelis.length === 0) {
-            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Veriler bekleniyor...</p>`;
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px; grid-column:span 2;">Veriler yükleniyor...</p>`;
             return;
         }
 
-        cachedHelis.sort((a, b) => a.id.localeCompare(b.id)).forEach(heli => {
+        // Seçilen grup türüne göre süzme yap (Sikorsky içerenler vs diğerleri)
+        let filteredHelis = cachedHelis.filter(h => {
+            const isSikorsky = h.type && h.type.includes('Sikorsky');
+            return currentHeliFilterType === 'Sikorsky' ? isSikorsky : !isSikorsky;
+        });
+
+        if (filteredHelis.length === 0) {
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px; grid-column:span 2;">Bu kategoride araç bulunmuyor.</p>`;
+            return;
+        }
+
+        filteredHelis.sort((a, b) => a.id.localeCompare(b.id)).forEach(heli => {
             const attached = cachedParts.filter(part => part.assignedTo === heli.id);
-            let previewText = "Takılı parça bulunmuyor.";
+            let previewText = "Parça yok.";
             if (attached.length > 0) {
-                previewText = attached.map(p => `• ${p.name} (S/N: ${p.serial})`).join('<br>');
+                previewText = attached.map(p => `• ${p.name}`).join('<br>');
             }
 
             const card = document.createElement('div');
             card.className = 'heli-card';
             card.onclick = () => { originPage = 'skorskyPage'; openHeliDetail(heli.id); };
             card.innerHTML = `
-                <div class="heli-badge">${heli.id}</div> 
-                <span style="font-size:12px; color:#4a5568; font-weight:bold; margin-left:10px;">[${heli.fleet || 'Filosuz'} Üssü]</span>
-                <div class="heli-preview-list" style="margin-top:6px;"><strong>Envanter Durumu:</strong><br>${previewText}</div>
+                <div>
+                    <div class="heli-badge">Kuyruk: ${heli.id}</div>
+                    <div class="heli-type-badge">${heli.type || 'Model Yok'}</div>
+                    <div style="font-size:10px; font-weight:bold; color:#4a5568; margin-bottom:4px;">Üs: ${heli.fleet || 'Yok'}</div>
+                </div>
+                <div class="heli-preview-list"><strong>Envanter:</strong><br>${previewText}</div>
             `;
             listDiv.appendChild(card);
         });
@@ -372,15 +400,16 @@
 
     window.openHeliDetail = (heliId) => {
         activeHeliId = heliId;
-        document.getElementById('detailHeliTitle').innerText = heliId + " Envanteri";
+        const targetHeli = cachedHelis.find(h => h.id === heliId);
+        const modelName = targetHeli ? targetHeli.type : "Hava Aracı";
+        document.getElementById('detailHeliTitle').innerText = `${modelName} (${heliId})`;
         navigateTo('heliDetailPage');
         updateDropdownAndDetail();
     };
 
-    window.handleHeliDetailBack = () => {
-        navigateTo(originPage);
-    };
+    window.handleHeliDetailBack = () => { navigateTo(originPage); };
 
+    // 2 SÜTUNLU TAKILI PARÇALARI LİSTELEME
     window.updateDropdownAndDetail = () => {
         if (activeHeliId === null) return;
         const attachedListDiv = document.getElementById('attachedPartsList');
@@ -388,17 +417,18 @@
         const attached = cachedParts.filter(part => part.assignedTo === activeHeliId);
 
         if (attached.length === 0) {
-            attachedListDiv.innerHTML = `<p style="color:#718096; font-style:italic;">Bu helikoptere zimmetli parça yok.</p>`;
+            attachedListDiv.innerHTML = `<p style="color:#718096; font-style:italic; grid-column:span 2; text-align:center; padding:10px;">Zimmetli parça bulunmuyor.</p>`;
         } else {
             attached.forEach(part => {
                 const card = document.createElement('div');
                 card.className = 'item-card';
+                card.style.minHeight = '100px';
                 card.innerHTML = `
                     <div>
-                        <strong>${part.name}</strong>
-                        <span style="font-size:12px; color:#718096; display:block;">S/N: ${part.serial} | Konum: ${part.location || 'Girilmemiş'}</span>
+                        <strong style="font-size:14px; color:#2d3748;">${part.name}</strong>
+                        <span style="font-size:11px; color:#718096; display:block; margin-top:2px;">S/N: ${part.serial}</span>
                     </div>
-                    <button class="btn-del" onclick="detachPart('${part.id}', '${part.name}', '${part.serial}')">Parçayı Sök</button>
+                    <button class="btn-del" onclick="detachPart('${part.id}', '${part.name}', '${part.serial}')" style="padding:3px 6px; font-size:10px;">Sök</button>
                 `;
                 attachedListDiv.appendChild(card);
             });
@@ -410,7 +440,7 @@
         available.forEach(part => {
             const opt = document.createElement('option');
             opt.value = part.id;
-            opt.innerText = `${part.name} (S/N: ${part.serial}) [${part.location || 'Depo'}]`;
+            opt.innerText = `${part.name} (S/N: ${part.serial})`;
             dropdown.appendChild(opt);
         });
     };
@@ -423,18 +453,16 @@
         const part = cachedParts.find(p => p.id === partId);
         try {
             await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: activeHeliId });
-            // İşlem Geçmişi Logu Yazdır
-            await createLog(part.name, part.serial, "Takıldı", `${activeHeliId} kuyruk numaralı hava aracına montajı yapıldı.`);
+            await createLog(part.name, part.serial, "Takıldı", `${activeHeliId} nolu araca montaj yapıldı.`);
             selectBox.value = "";
         } catch (error) { alert("Hata: " + error.message); }
     };
 
     window.detachPart = async (partId, partName, partSerial) => {
-        if (confirm("Bu parçayı helikopterden sökmek istediğinize emin misiniz?")) {
+        if (confirm("Bu parçayı söküp depoya çekmek istiyor musunuz?")) {
             try { 
                 await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: null }); 
-                // İşlem Geçmişi Logu Yazdır
-                await createLog(partName, partSerial, "Söküldü", `${activeHeliId} kuyruk numaralı hava aracından sökülerek depoya alındı.`);
+                await createLog(partName, partSerial, "Söküldü", `${activeHeliId} nolu araçtan sökülerek merkeze alındı.`);
             } catch (error) { alert("Hata: " + error.message); }
         }
     };
@@ -451,7 +479,7 @@
 
         const isDuplicate = cachedParts.some(part => part.serial.toLowerCase() === serial.toLowerCase());
         if (isDuplicate) {
-            alert(`Kayıt Reddedildi!\n"${serial}" Seri Numaralı (S/N) bir parça sistemde zaten mevcut.`);
+            alert(`S/N: "${serial}" envanterde zaten mevcut.`);
             return;
         }
 
@@ -460,79 +488,62 @@
             document.getElementById('materialForm').reset();
             document.getElementById('matStatus').value = "Faal";
             document.getElementById('matLocation').value = "İstanbul";
-            alert("Parça başarıyla envantere eklendi.");
+            alert("Parça kaydedildi.");
             switchGsoSection('list'); 
         } catch (error) { alert("Hata: " + error.message); }
     });
 
-    // MALZEME LİSTESİ VE GELİŞMİŞ FİLTRELERLEME
     window.setAdvancedFilter = (type) => {
         advFilter = type;
         const advFilters = ['allStatus', 'unattached', 'faal', 'arizali'];
         advFilters.forEach(f => {
             const btn = document.getElementById(`adv-${f}`);
-            if (btn) {
-                if (f === type) btn.classList.add('active');
-                else btn.classList.remove('active');
-            }
+            if (btn) { f === type ? btn.classList.add('active') : btn.classList.remove('active'); }
         });
         renderList();
     };
 
+    // 2 SÜTUNLU MALZEME LİSTESİ RENDER METODU
     window.renderList = () => {
         const listDiv = document.getElementById('dynamicMaterialList');
         if(!listDiv) return;
         listDiv.innerHTML = '';
         
-        // 1. Kategori Filtresi
         let filteredData = cachedParts.filter(item => currentFilter === 'hepsi' || item.category === currentFilter);
 
-        // 2. Gelişmiş Filtreleme Uygulamaları (Yeni İstekler)
-        if (advFilter === 'unattached') {
-            filteredData = filteredData.filter(item => !item.assignedTo);
-        } else if (advFilter === 'faal') {
-            filteredData = filteredData.filter(item => item.status === 'Faal');
-        } else if (advFilter === 'arizali') {
-            filteredData = filteredData.filter(item => item.status === 'Gayri Faal' || item.status === 'Onarımda');
-        }
+        if (advFilter === 'unattached') { filteredData = filteredData.filter(item => !item.assignedTo); } 
+        else if (advFilter === 'faal') { filteredData = filteredData.filter(item => item.status === 'Faal'); } 
+        else if (advFilter === 'arizali') { filteredData = filteredData.filter(item => item.status === 'Gayri Faal' || item.status === 'Onarımda'); }
 
         if (filteredData.length === 0) {
-            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Kriterlere uygun parça bulunamadı.</p>`;
+            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; grid-column:span 2; font-style:italic;">Kayıt bulunamadı.</p>`;
             return;
         }
 
         filteredData.forEach((item) => {
             const card = document.createElement('div');
             card.className = 'item-card';
-            card.style.flexDirection = 'column';
-            card.style.alignItems = 'stretch';
-            card.style.gap = '10px';
 
             let statusColor = '#2f855a'; 
             if (item.status === 'Gayri Faal') statusColor = '#c53030'; 
             if (item.status === 'Onarımda') statusColor = '#dd6b20'; 
 
-            const locationText = item.assignedTo ? `<span style="background:#3182ce; color:white; padding:2px 6px; font-size:11px; border-radius:4px; font-weight:bold; margin-left:6px;">${item.assignedTo}'DE TAKILI</span>` : '';
-            const fleetBaseText = `<span style="background:#4a5568; color:white; padding:2px 6px; font-size:11px; border-radius:4px; margin-left:4px;">${item.location || 'Depo'}</span>`;
+            const locationText = item.assignedTo ? `<span style="background:#3182ce; color:white; padding:1px 4px; font-size:9px; border-radius:3px; font-weight:bold; display:block; margin-top:3px; width:fit-content;">${item.assignedTo}'DE</span>` : '';
 
             card.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <span style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; background: #edf2f7; padding: 2px 6px; border-radius: 4px;">${item.category}</span>
-                        ${fleetBaseText}
-                        ${locationText}
-                        <strong style="font-size: 18px; margin-top: 4px; display: block; color: #2d3748;">${item.name}</strong>
-                        <span style="font-size: 13px; color: #4a5568;">S/N: <b>${item.serial}</b></span>
-                    </div>
-                    <button class="btn-del" onclick="deleteItem('${item.id}')" style="height: 30px; font-size: 12px;">Sil</button>
+                <div>
+                    <span style="font-size: 9px; font-weight: bold; color: #718096; text-transform: uppercase; background: #edf2f7; padding: 1px 4px; border-radius: 3px;">${item.location || 'Depo'}</span>
+                    ${locationText}
+                    <strong style="font-size: 14px; margin-top: 3px; display: block; color: #2d3748; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name}</strong>
+                    <span style="font-size: 11px; color: #4a5568; display:block;">S/N: ${item.serial}</span>
                 </div>
-                <div style="display: flex; gap: 8px; align-items: center; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
-                    <select onchange="updateItemField('${item.id}', 'status', this.value)" style="padding: 6px; border-radius: 4px; border: 1px solid #cbd5e0; font-size: 13px; font-weight: bold; color: white; background: ${statusColor};">
+                <div>
+                    <select onchange="updateItemField('${item.id}', 'status', this.value)" style="padding: 4px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; background: ${statusColor}; margin-bottom:4px;">
                         <option value="Faal" ${item.status === 'Faal' ? 'selected' : ''}>Faal</option>
-                        <option value="Gayri Faal" ${item.status === 'Gayri Faal' ? 'selected' : ''}>Gayri Faal</option>
-                        <option value="Onarımda" ${item.status === 'Onarımda' ? 'selected' : ''}>Onarımda</option>
+                        <option value="Gayri Faal" ${item.status === 'Gayri Faal' ? 'selected' : ''}>G.Faal</option>
+                        <option value="Onarımda" ${item.status === 'Onarımda' ? 'selected' : ''}>Onarım</option>
                     </select>
-                    <input type="text" value="${item.desc}" onchange="updateItemField('${item.id}', 'desc', this.value)" style="padding: 6px; font-size: 13px; border: 1px solid #edf2f7; background: #fafafa; border-radius: 4px; width: 100%;">
+                    <button class="btn-del" onclick="deleteItem('${item.id}')">Sil</button>
                 </div>
             `;
             listDiv.appendChild(card);
@@ -568,6 +579,7 @@
         renderFleetHeliList();
     };
 
+    // 2 SÜTUNLU FİLO İÇİ HAVA ARACI LİSTESİ RENDER METODU
     window.renderFleetHeliList = () => {
         if (!activeFleetName) return;
         const listDiv = document.getElementById('fleetHeliList');
@@ -575,47 +587,54 @@
 
         const fleetHelis = cachedHelis.filter(h => h.fleet === activeFleetName);
         if (fleetHelis.length === 0) {
-            listDiv.innerHTML = `<p style="color:#718096; font-style:italic; padding:10px 0;">Bu filoda konuşlu helikopter bulunmamaktadır.</p>`;
+            listDiv.innerHTML = `<p style="color:#718096; font-style:italic; padding:10px 0; grid-column:span 2; text-align:center;">Konuşlu araç bulunmuyor.</p>`;
             return;
         }
 
         fleetHelis.forEach(heli => {
             const card = document.createElement('div');
             card.className = 'item-card';
+            card.style.minHeight = '100px';
             card.innerHTML = `
                 <div style="cursor:pointer;" onclick="goToHeliFromFleet('${heli.id}')">
-                    <strong>${heli.id}</strong>
-                    <span style="font-size:12px; color:#718096; display:block;">Detayları incelemek için tıkla</span>
+                    <strong style="font-size:15px; color:#1a252f;">No: ${heli.id}</strong>
+                    <span style="font-size:11px; color:#3182ce; display:block; font-weight:bold; margin-top:2px;">${heli.type}</span>
                 </div>
-                <button class="btn-del" onclick="removeHeliFromFleet('${heli.id}')">Filodan Çıkar</button>
+                <button class="btn-del" onclick="removeHeliFromFleet('${heli.id}')" style="padding:3px 6px; font-size:10px;">Kaldır</button>
             `;
             listDiv.appendChild(card);
         });
     };
 
+    // Yeni İstek: Dropdown'dan Seçilen Tür/Model ile Birlikte Filoya Helikopter Ekleme
     window.addNewHeliToFleet = async () => {
         const input = document.getElementById('newHeliNameInput');
+        const typeSelect = document.getElementById('newHeliTypeSelect');
+        
         const heliId = input.value.trim().toUpperCase();
+        const heliType = typeSelect.value;
+
         if(!heliId) { alert("Lütfen geçerli bir kuyruk numarası girin."); return; }
+        if(!heliType) { alert("Lütfen hava aracı türünü listeden seçin."); return; }
 
         try {
-            await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId, fleet: activeFleetName }, { merge: true });
+            await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId, type: heliType, fleet: activeFleetName }, { merge: true });
             input.value = '';
-            alert(`${heliId} helikopteri başarıyla ${activeFleetName} filosuna eklendi.`);
+            typeSelect.value = '';
+            alert(`No: ${heliId} (${heliType}) başarıyla ${activeFleetName} filosuna eklendi.`);
         } catch(e) { alert("Hata: " + e.message); }
     };
 
     window.removeHeliFromFleet = async (heliId) => {
-        if (confirm(`${heliId} aracını bu filodan çıkartıp üssüz duruma getirmek istiyor musunuz?`)) {
+        if (confirm(`${heliId} nolu aracı filodan ayırmak istiyor musunuz?`)) {
             try {
                 await updateDoc(doc(db, "skorsky_helikopterler", heliId), { fleet: "" });
-                alert("Araç filodan ayrıldı.");
             } catch(e) { alert("Hata: " + e.message); }
         }
     };
 
     window.goToHeliFromFleet = (heliId) => {
-        originPage = 'fleetDetailPage'; // Geri dönülecek yeri filo detay ayarla
+        originPage = 'fleetDetailPage'; 
         openHeliDetail(heliId);
     };
 
@@ -626,7 +645,7 @@
         listDiv.innerHTML = '';
 
         if (cachedLogs.length === 0) {
-            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Henüz kaydedilmiş bir işlem log kaydı bulunmuyor.</p>`;
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Kayıt bulunmuyor.</p>`;
             return;
         }
 
@@ -636,29 +655,22 @@
             logCard.className = `log-item ${log.action.toLowerCase() === 'takıldı' ? 'takildi' : 'sokuldu'}`;
             logCard.innerHTML = `
                 <div>
-                    <b style="color:#2c3e50;">[${log.action.toUpperCase()}]</b> ${log.partName} (S/N: ${log.serial})<br>
-                    <span style="color:#4a5568; font-size:12px;">${log.detail}</span><br>
-                    <span style="color:#a0aec0; font-size:11px;">${dateStr}</span>
+                    <b>[${log.action.toUpperCase()}]</b> ${log.partName} (${log.serial})<br>
+                    <span style="color:#4a5568; font-size:11px;">${log.detail} - ${dateStr}</span>
                 </div>
-                <button onclick="deleteLog('${log.id}')" style="background:transparent; border:none; color:#e53e3e; cursor:pointer; font-weight:bold; font-size:15px; padding:0 5px;">×</button>
+                <button onclick="deleteLog('${log.id}')" style="background:transparent; border:none; color:#e53e3e; cursor:pointer; font-weight:bold; font-size:14px;">×</button>
             `;
             listDiv.appendChild(logCard);
         });
     };
 
     window.deleteLog = async (logId) => {
-        if (confirm("Bu log kaydını silmek istediğinize emin misiniz?")) {
-            await deleteDoc(doc(db, "islem_loglari", logId));
-        }
+        if (confirm("Silinsin mi?")) { await deleteDoc(doc(db, "islem_loglari", logId)); }
     };
 
     window.clearAllLogs = async () => {
-        if (confirm("TÜM İŞLEM GEÇMİŞİNİ kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz!")) {
-            // Firestore client-side toplu silme işlemi döngüyle sağlanır
-            for (const log of cachedLogs) {
-                await deleteDoc(doc(db, "islem_loglari", log.id));
-            }
-            alert("Tüm işlem geçmişi logları temizlendi.");
+        if (confirm("Tüm geçmiş temizlensin mi?")) {
+            for (const log of cachedLogs) { await deleteDoc(doc(db, "islem_loglari", log.id)); }
         }
     };
 </script>
@@ -676,6 +688,7 @@
         document.getElementById('btnSubList').classList.remove('active');
 
         if (section === 'add') {
+            document.getElementById('gsoSecAdd').classList.add('add');
             document.getElementById('gsoSecAdd').classList.add('active');
             document.getElementById('btnSubAdd').classList.add('active');
         } else {
