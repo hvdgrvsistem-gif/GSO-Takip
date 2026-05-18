@@ -15,17 +15,15 @@
         /* Ana Başlık Alanı */
         .header-banner { background: #1a252f; color: white; padding: 25px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
         
-        /* Buton Izgaraları (Grid Layout) */
+        /* Buton Izgaraları */
         .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 10px; }
         .menu-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 10px; }
         
         /* Menü Butonları */
         .menu-btn { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 20px 10px; font-size: 13px; font-weight: bold; color: #2c3e50; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; min-height: 90px; text-transform: uppercase; }
         .menu-btn:hover { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; transform: translateY(-2px); }
-        .menu-btn.disabled { background: #f7fafc; color: #a0aec0; border-color: #edf2f7; cursor: not-allowed; }
-        .menu-btn.disabled:hover { transform: none; background: #f7fafc; border-color: #edf2f7; color: #a0aec0; }
         
-        /* Helikopter Kart Tasarımı */
+        /* Kart Tasarımları */
         .heli-card { background: #ffffff; border: 2px solid #cbd5e0; border-radius: 10px; padding: 15px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s ease; }
         .heli-card:hover { border-color: #3182ce; background: #f7fafc; transform: translateY(-2px); }
         .heli-badge { display: inline-block; background: #2d3748; color: white; padding: 4px 10px; font-weight: bold; border-radius: 5px; font-size: 14px; margin-bottom: 8px; }
@@ -42,16 +40,17 @@
         .btn-back { background: #718096; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
         .btn-back:hover { background: #4a5568; }
 
-        /* Form, Liste ve Genel Yapılar */
+        /* Form ve Genel Yapılar */
         form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
         input, select { padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; width: 100%; background: white; }
         .btn-submit { background: #3182ce; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; cursor: pointer; font-weight: bold; text-align: center; }
         .btn-submit:hover { background: #2b6cb0; }
+        
         .item-card { display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; background: #f8fafc; }
         .btn-del { background: #e53e3e; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .btn-del:hover { background: #c53030; }
 
-        /* Alt Menü Sekme Stilleri (GSO ve Katalog için ortak) */
+        /* Alt Menü Sekme Stilleri */
         .sub-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
         .sub-tab-btn { padding: 12px 5px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 12px; text-align: center; }
         .sub-tab-btn.active { background: #3182ce; color: white; border-color: #3182ce; }
@@ -59,16 +58,20 @@
         .sub-section { display: none; animation: fadeIn 0.2s ease; }
         .sub-section.active { display: block; }
 
-        /* Katalog Detay Kartı Tasarımı */
         .catalog-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
         .catalog-card h4 { color: #2c3e50; margin-bottom: 6px; font-size: 16px; border-bottom: 1px solid #edf2f7; padding-bottom: 4px; }
         .catalog-card p { font-size: 13px; color: #4a5568; line-height: 1.5; }
         .catalog-card ul { margin-top: 6px; padding-left: 20px; font-size: 13px; color: #4a5568; }
 
-        @media (max-width: 400px) {
-            .menu-grid { grid-template-columns: repeat(2, 1fr); }
-            .menu-grid-2 { grid-template-columns: 1fr; }
-        }
+        /* Gelişmiş GSO Filtreleri CSS */
+        .adv-filter-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; background: #edf2f7; padding: 8px; border-radius: 8px; margin-bottom: 12px; }
+        .adv-filter-btn { padding: 8px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 6px; cursor: pointer; background: white; color: #4a5568; text-align: center; }
+        .adv-filter-btn.active { background: #4a5568; color: white; border-color: #4a5568; }
+
+        /* Log Listesi Stili */
+        .log-item { background: #f8fafc; border-left: 4px solid #4a5568; padding: 10px; margin-bottom: 8px; border-radius: 0 6px 6px 0; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .log-item.takildi { border-left-color: #2f855a; }
+        .log-item.sokuldu { border-left-color: #c53030; }
     </style>
 </head>
 <body>
@@ -82,8 +85,8 @@
             <div class="menu-btn" onclick="navigateTo('gsoMalzemelerPage')">GSO Malzemeler</div>
             <div class="menu-btn" onclick="navigateTo('katalogPage')">Katalog</div>
             <div class="menu-btn" onclick="navigateTo('filolarPage')">Filolar</div>
-            <div class="menu-btn disabled">To Be Decided</div>
-            <div class="menu-btn disabled">To Be Decided</div>
+            <div class="menu-btn" onclick="navigateTo('historyPage')">İşlem Geçmişi</div>
+            <div class="menu-btn" style="background: #f7fafc; color: #a0aec0; border-color: #edf2f7; cursor: not-allowed;">TBD</div>
         </div>
     </div>
 
@@ -96,7 +99,7 @@
             <div class="menu-btn" onclick="navigateTo('skorskyPage')">Skorsky</div>
             <div class="menu-btn" onclick="navigateTo('cougarPage')">Cougar</div>
             <div class="menu-btn" onclick="navigateTo('atakPage')">Atak</div>
-            <div class="menu-btn disabled">Diğer</div>
+            <div class="menu-btn" style="background: #f7fafc; color: #a0aec0; border-color: #edf2f7; cursor: not-allowed;">Diğer</div>
         </div>
     </div>
 
@@ -113,7 +116,7 @@
     <div id="heliDetailPage" class="page-content">
         <div class="page-title">
             <span id="detailHeliTitle">Helikopter Detay</span>
-            <button class="btn-back" onclick="navigateTo('skorskyPage')">Geri</button>
+            <button class="btn-back" onclick="handleHeliDetailBack()">Geri</button>
         </div>
         <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
             <h4 style="margin-bottom: 8px; color: #2c3e50;">Üzerine Yeni Parça Tak</h4>
@@ -156,17 +159,31 @@
                     <option value="Gayri Faal">Gayri Faal</option>
                     <option value="Onarımda">Onarımda</option>
                 </select>
+                <select id="matLocation" style="margin-bottom: 8px;" required>
+                    <option value="İstanbul">İstanbul Filosu</option>
+                    <option value="İzmir">İzmir Filosu</option>
+                    <option value="Antalya">Antalya Filosu</option>
+                    <option value="Adana">Adana Filosu</option>
+                    <option value="Diyarbakır">Diyarbakır Filosu</option>
+                    <option value="Van">Van Filosu</option>
+                </select>
                 <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)" style="margin-bottom: 8px;">
                 <button type="submit" class="btn-submit">Parçayı Kaydet</button>
             </form>
         </div>
 
         <div id="gsoSecList" class="sub-section">
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 12px;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 6px;">
                 <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
                 <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜ</button>
                 <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 8px 3px; font-size: 10px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">K.TEDBİR</button>
                 <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">H.YÜK</button>
+            </div>
+            <div class="adv-filter-grid">
+                <button onclick="setAdvancedFilter('allStatus')" id="adv-allStatus" class="adv-filter-btn active">TÜM DURUMLAR</button>
+                <button onclick="setAdvancedFilter('unattached')" id="adv-unattached" class="adv-filter-btn">TAKILI OLMAYANLAR</button>
+                <button onclick="setAdvancedFilter('faal')" id="adv-faal" class="adv-filter-btn">SADECE FAAL</button>
+                <button onclick="setAdvancedFilter('arizali')" id="adv-arizali" class="adv-filter-btn">SADECE ARIZALI</button>
             </div>
             <div id="dynamicMaterialList"></div>
         </div>
@@ -177,79 +194,72 @@
             <span>Sistem Kataloğu</span>
             <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
         </div>
-
         <div class="sub-menu-grid">
             <button id="btnCatView" onclick="switchCatalogTab('view')" class="sub-tab-btn active">Görüntüleme</button>
             <button id="btnCatCounter" onclick="switchCatalogTab('counter')" class="sub-tab-btn">Karşı Tedbir</button>
             <button id="btnCatPayload" onclick="switchCatalogTab('payload')" class="sub-tab-btn">Harici Yük</button>
         </div>
-
         <div id="catSecView" class="sub-section active">
-            <div class="catalog-card">
-                <h4>FLIR (Termal Kamera Sistemi)</h4>
-                <p>Gece ve gündüz şartlarında pilotların görüş kabiliyetini artırmak, hedef tespiti ve teşhisi yapmak amacıyla kullanılan elektro-optik kızılötesi sistemdir.</p>
-                <ul>
-                    <li><b>Kullanım Amacı:</b> Hedefleme ve Keşif</li>
-                    <li><b>Optik Dalga Boyu:</b> MWIR (Orta Dalga Kızılötesi)</li>
-                    <li><b>Görüş Açısı:</b> Geniş, Orta ve Dar Sürekli Yakınlaştırma</li>
-                </ul>
-            </div>
-            <div class="catalog-card">
-                <h4>NVG (Gece Görüş Gözlüğü)</h4>
-                <p>Ortamdaki minimal ışığı (yıldız, ay ışığı) güçlendirerek gece uçuşlarında pilotlara görsel referans sağlayan kaska monteli sistem.</p>
-                <ul>
-                    <li><b>Tüp Nesli:</b> Gen 3 / Gen 4</li>
-                    <li><b>Fosfor Tipi:</b> Yeşil / Beyaz Fosfor seçenekleri</li>
-                </ul>
-            </div>
+            <div class="catalog-card"><h4>FLIR (Termal Kamera Sistemi)</h4><p>Gece ve gündüz şartlarında hedef tespiti ve teşhisi yapan elektro-optik kızılötesi sistemdir.</p></div>
+            <div class="catalog-card"><h4>NVG (Gece Görüş Gözlüğü)</h4><p>Ortamdaki ışığı güçlendirerek pilotlara görsel referans sağlayan sistemdir.</p></div>
         </div>
-
         <div id="catSecCounter" class="sub-section">
-            <div class="catalog-card">
-                <h4>Chaff / Flare Dispenser</h4>
-                <p>Helikoptere yönelen radar güdümlü füzelere karşı Chaff (metalik bulut), ısı güdümlü füzelere karşı ise Flare (yüksek ısı yayan magnezyum fişekleri) fırlatan savunma sistemidir.</p>
-                <ul>
-                    <li><b>Mühimmat Kapasitesi:</b> 30/60 Hazne</li>
-                    <li><b>Ateşleme Modları:</b> Otomatik, Yarı Otomatik, Manuel</li>
-                </ul>
-            </div>
-            <div class="catalog-card">
-                <h4>MWS (Füze İkaz Sistemi)</h4>
-                <p>Helikoptere yaklaşan füzelerin motor egzoz morötesi (UV) veya kızılötesi (IR) izlerini tespit ederek pilotu uyaran ve karşı tedbir sistemini tetikleyen aktif sensör ağıdır.</p>
-                <ul>
-                    <li><b>Kapsama Alanı:</b> 360 Derece Küresel Koruma</li>
-                    <li><b>Tepki Süresi:</b> < 0.5 Saniye</li>
-                </ul>
-            </div>
+            <div class="catalog-card"><h4>Chaff / Flare Dispenser</h4><p>Radar ve ısı güdümlü füzelere karşı fırlatılan savunma sistemidir.</p></div>
         </div>
-
         <div id="catSecPayload" class="sub-section">
-            <div class="catalog-card">
-                <h4>Harici Yakıt Tankı (Auxiliary Fuel Tank)</h4>
-                <p>Helikopterin menzilini ve havada kalış süresini artırmak amacıyla kanat altı pilonlara veya kabin içerisine monte edilen ek yakıt depolama sistemidir.</p>
-                <ul>
-                    <li><b>Kapasite:</b> 230 / 450 Galon opsiyonları</li>
-                    <li><b>Güvenlik:</b> Kendini Sızdırmazlık (Self-Sealing) Özelliği</li>
-                </ul>
-            </div>
-            <div class="catalog-card">
-                <h4>Arama Kurtarma Vinci (Rescue Hoist)</h4>
-                <p>Helikopterin iniş yapamadığı engebeli, deniz veya ormanlık arazilerde personel ya da kazazedeleri yukarı çekmek amacıyla kullanılan hidrolik/elektrikli vinç sistemi.</p>
-                <ul>
-                    <li><b>Maksimum Taşıma:</b> 270 kg (600 lbs)</li>
-                    <li><b>Kablo Uzunluğu:</b> 75 Metre</li>
-                </ul>
-            </div>
+            <div class="catalog-card"><h4>Harici Yakıt Tankı</h4><p>Helikopterin menzilini ve havada kalış süresini artıran sistemdir.</p></div>
         </div>
     </div>
 
-    <div id="filolarPage" class="page-content"><div class="page-title"><span>Filolar</span><button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Filo bilgileri yakında burada.</p></div>
+    <div id="filolarPage" class="page-content">
+        <div class="page-title">
+            <span>Hava Filoları Üsleri</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
+        </div>
+        <div class="menu-grid-2" id="fleetGridArea">
+            <div class="menu-btn" onclick="openFleetDetail('İstanbul')">İstanbul Filosu</div>
+            <div class="menu-btn" onclick="openFleetDetail('İzmir')">İzmir Filosu</div>
+            <div class="menu-btn" onclick="openFleetDetail('Antalya')">Antalya Filosu</div>
+            <div class="menu-btn" onclick="openFleetDetail('Adana')">Adana Filosu</div>
+            <div class="menu-btn" onclick="openFleetDetail('Diyarbakır')">Diyarbakır Filosu</div>
+            <div class="menu-btn" onclick="openFleetDetail('Van')">Van Filosu</div>
+        </div>
+    </div>
+
+    <div id="fleetDetailPage" class="page-content">
+        <div class="page-title">
+            <span id="fleetDetailTitle">Filo Detay</span>
+            <button class="btn-back" onclick="navigateTo('filolarPage')">Geri</button>
+        </div>
+        <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 15px;">
+            <h4 style="margin-bottom: 6px; color: #2c3e50; font-size:14px;">Filoya Yeni Helikopter Ekle</h4>
+            <div style="display:flex; gap:6px;">
+                <input type="text" id="newHeliNameInput" placeholder="Örn: SKORSKY-1005" style="padding:8px; font-size:14px;">
+                <button onclick="addNewHeliToFleet()" class="btn-submit" style="padding:0 15px; font-size:13px;">Ekle</button>
+            </div>
+        </div>
+        <h4 style="margin-bottom: 8px; color: #2c3e50; font-size:15px;">Filoda Kayıtlı Helikopterler:</h4>
+        <div id="fleetHeliList"></div>
+    </div>
+
+    <div id="historyPage" class="page-content">
+        <div class="page-title">
+            <span>İşlem Geçmişi Logs</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
+        </div>
+        <div style="text-align: right; margin-bottom: 12px;">
+            <button onclick="clearAllLogs()" class="btn-del" style="background:#4a5568;">Tüm Geçmişi Temizle</button>
+        </div>
+        <div id="logHistoryList">
+            <p style="text-align:center; color:#718096; padding:20px;">Kayıt bulunamadı.</p>
+        </div>
+    </div>
 
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc, setDoc } 
+    import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc, setDoc, serverTimestamp, query, orderBy } 
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -266,42 +276,78 @@
     const db = getFirestore(app);
     const gsoCollection = collection(db, "gso_envanter");
     const heliCollection = collection(db, "skorsky_helikopterler");
+    const logsCollection = collection(db, "islem_loglari");
 
     let currentFilter = 'hepsi';
+    let advFilter = 'allStatus'; // allStatus, unattached, faal, arizali
     let cachedParts = [];
     let cachedHelis = [];
+    let cachedLogs = [];
     let activeHeliId = null;
+    let activeFleetName = null;
+    let originPage = 'skorskyPage'; // Detay ekranı dönüş yönetimi için
 
+    // Helikopterleri İlk Açılışta Atama
     const initSkorskyHelis = async () => {
-        const defaultHelis = ["SKORSKY-1001", "SKORSKY-1002", "SKORSKY-1003", "SKORSKY-1004"];
-        defaultHelis.forEach(async (heliId) => {
-            await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId }, { merge: true });
+        const defaultHelis = [
+            { id: "SKORSKY-1001", fleet: "İstanbul" },
+            { id: "SKORSKY-1002", fleet: "İzmir" },
+            { id: "SKORSKY-1003", fleet: "Antalya" },
+            { id: "SKORSKY-1004", fleet: "Diyarbakır" }
+        ];
+        defaultHelis.forEach(async (item) => {
+            await setDoc(doc(db, "skorsky_helikopterler", item.id), { name: item.id, fleet: item.fleet }, { merge: true });
         });
     };
     initSkorskyHelis();
 
+    // Firebase Canlı Akışları
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
         snapshot.forEach(docSnap => { cachedParts.push({ id: docSnap.id, ...docSnap.data() }); });
         renderList();       
         renderSkorskyList(); 
-        updateDropdownAndDetail(); 
+        updateDropdownAndDetail();
+        renderFleetHeliList();
     });
 
     onSnapshot(heliCollection, (snapshot) => {
         cachedHelis = [];
         snapshot.forEach(docSnap => { cachedHelis.push({ id: docSnap.id, ...docSnap.data() }); });
         renderSkorskyList(); 
-        updateDropdownAndDetail(); 
+        updateDropdownAndDetail();
+        renderFleetHeliList();
     });
 
+    // Log akışı - Tarihe göre tersten listeleme
+    const logQuery = query(logsCollection, orderBy("timestamp", "desc"));
+    onSnapshot(logQuery, (snapshot) => {
+        cachedLogs = [];
+        snapshot.forEach(docSnap => { cachedLogs.push({ id: docSnap.id, ...docSnap.data() }); });
+        renderLogHistory();
+    });
+
+    // Log Ekleme Fonksiyonu
+    const createLog = async (partName, serial, action, detail) => {
+        try {
+            await addDoc(logsCollection, {
+                partName,
+                serial,
+                action, // 'Takıldı' veya 'Söküldü'
+                detail,
+                timestamp: serverTimestamp()
+            });
+        } catch (e) { console.error("Log hatası:", e); }
+    };
+
+    // Helikopter Listesini Ekrana Basma
     window.renderSkorskyList = () => {
         const listDiv = document.getElementById('skorskyListArea');
         if (!listDiv) return;
         listDiv.innerHTML = '';
 
         if(cachedHelis.length === 0) {
-            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Firebase'den helikopterler bekleniyor...</p>`;
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Veriler bekleniyor...</p>`;
             return;
         }
 
@@ -314,10 +360,11 @@
 
             const card = document.createElement('div');
             card.className = 'heli-card';
-            card.onclick = () => openHeliDetail(heli.id);
+            card.onclick = () => { originPage = 'skorskyPage'; openHeliDetail(heli.id); };
             card.innerHTML = `
-                <div class="heli-badge">${heli.id}</div>
-                <div class="heli-preview-list"><strong>Envanter Durumu:</strong><br>${previewText}</div>
+                <div class="heli-badge">${heli.id}</div> 
+                <span style="font-size:12px; color:#4a5568; font-weight:bold; margin-left:10px;">[${heli.fleet || 'Filosuz'} Üssü]</span>
+                <div class="heli-preview-list" style="margin-top:6px;"><strong>Envanter Durumu:</strong><br>${previewText}</div>
             `;
             listDiv.appendChild(card);
         });
@@ -328,6 +375,10 @@
         document.getElementById('detailHeliTitle').innerText = heliId + " Envanteri";
         navigateTo('heliDetailPage');
         updateDropdownAndDetail();
+    };
+
+    window.handleHeliDetailBack = () => {
+        navigateTo(originPage);
     };
 
     window.updateDropdownAndDetail = () => {
@@ -345,9 +396,9 @@
                 card.innerHTML = `
                     <div>
                         <strong>${part.name}</strong>
-                        <span style="font-size:12px; color:#718096; display:block;">S/N: ${part.serial} | Kategori: ${part.category}</span>
+                        <span style="font-size:12px; color:#718096; display:block;">S/N: ${part.serial} | Konum: ${part.location || 'Girilmemiş'}</span>
                     </div>
-                    <button class="btn-del" onclick="detachPart('${part.id}')">Parçayı Sök</button>
+                    <button class="btn-del" onclick="detachPart('${part.id}', '${part.name}', '${part.serial}')">Parçayı Sök</button>
                 `;
                 attachedListDiv.appendChild(card);
             });
@@ -359,7 +410,7 @@
         available.forEach(part => {
             const opt = document.createElement('option');
             opt.value = part.id;
-            opt.innerText = `${part.name} (S/N: ${part.serial}) [${part.category}]`;
+            opt.innerText = `${part.name} (S/N: ${part.serial}) [${part.location || 'Depo'}]`;
             dropdown.appendChild(opt);
         });
     };
@@ -368,24 +419,34 @@
         const selectBox = document.getElementById('availablePartsDropdown');
         const partId = selectBox.value;
         if (!partId || !activeHeliId) { alert("Lütfen listeden faal bir parça seçin."); return; }
+        
+        const part = cachedParts.find(p => p.id === partId);
         try {
             await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: activeHeliId });
+            // İşlem Geçmişi Logu Yazdır
+            await createLog(part.name, part.serial, "Takıldı", `${activeHeliId} kuyruk numaralı hava aracına montajı yapıldı.`);
             selectBox.value = "";
         } catch (error) { alert("Hata: " + error.message); }
     };
 
-    window.detachPart = async (partId) => {
+    window.detachPart = async (partId, partName, partSerial) => {
         if (confirm("Bu parçayı helikopterden sökmek istediğinize emin misiniz?")) {
-            try { await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: null }); } catch (error) { alert("Hata: " + error.message); }
+            try { 
+                await updateDoc(doc(db, "gso_envanter", partId), { assignedTo: null }); 
+                // İşlem Geçmişi Logu Yazdır
+                await createLog(partName, partSerial, "Söküldü", `${activeHeliId} kuyruk numaralı hava aracından sökülerek depoya alındı.`);
+            } catch (error) { alert("Hata: " + error.message); }
         }
     };
 
+    // GSO MALZEME EKLEME
     document.getElementById('materialForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const category = document.getElementById('matCategory').value;
         const name = document.getElementById('matName').value;
         const serial = document.getElementById('matSerial').value.trim();
         const status = document.getElementById('matStatus').value;
+        const location = document.getElementById('matLocation').value;
         const desc = document.getElementById('matDesc').value || "Açıklama yok.";
 
         const isDuplicate = cachedParts.some(part => part.serial.toLowerCase() === serial.toLowerCase());
@@ -395,22 +456,48 @@
         }
 
         try {
-            await addDoc(gsoCollection, { category, name, serial, status, desc, assignedTo: null });
+            await addDoc(gsoCollection, { category, name, serial, status, location, desc, assignedTo: null });
             document.getElementById('materialForm').reset();
             document.getElementById('matStatus').value = "Faal";
+            document.getElementById('matLocation').value = "İstanbul";
             alert("Parça başarıyla envantere eklendi.");
             switchGsoSection('list'); 
         } catch (error) { alert("Hata: " + error.message); }
     });
 
+    // MALZEME LİSTESİ VE GELİŞMİŞ FİLTRELERLEME
+    window.setAdvancedFilter = (type) => {
+        advFilter = type;
+        const advFilters = ['allStatus', 'unattached', 'faal', 'arizali'];
+        advFilters.forEach(f => {
+            const btn = document.getElementById(`adv-${f}`);
+            if (btn) {
+                if (f === type) btn.classList.add('active');
+                else btn.classList.remove('active');
+            }
+        });
+        renderList();
+    };
+
     window.renderList = () => {
         const listDiv = document.getElementById('dynamicMaterialList');
         if(!listDiv) return;
         listDiv.innerHTML = '';
-        const filteredData = cachedParts.filter(item => currentFilter === 'hepsi' || item.category === currentFilter);
+        
+        // 1. Kategori Filtresi
+        let filteredData = cachedParts.filter(item => currentFilter === 'hepsi' || item.category === currentFilter);
+
+        // 2. Gelişmiş Filtreleme Uygulamaları (Yeni İstekler)
+        if (advFilter === 'unattached') {
+            filteredData = filteredData.filter(item => !item.assignedTo);
+        } else if (advFilter === 'faal') {
+            filteredData = filteredData.filter(item => item.status === 'Faal');
+        } else if (advFilter === 'arizali') {
+            filteredData = filteredData.filter(item => item.status === 'Gayri Faal' || item.status === 'Onarımda');
+        }
 
         if (filteredData.length === 0) {
-            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Kayıtlı parça bulunamadı.</p>`;
+            listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Kriterlere uygun parça bulunamadı.</p>`;
             return;
         }
 
@@ -426,11 +513,13 @@
             if (item.status === 'Onarımda') statusColor = '#dd6b20'; 
 
             const locationText = item.assignedTo ? `<span style="background:#3182ce; color:white; padding:2px 6px; font-size:11px; border-radius:4px; font-weight:bold; margin-left:6px;">${item.assignedTo}'DE TAKILI</span>` : '';
+            const fleetBaseText = `<span style="background:#4a5568; color:white; padding:2px 6px; font-size:11px; border-radius:4px; margin-left:4px;">${item.location || 'Depo'}</span>`;
 
             card.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                     <div>
                         <span style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; background: #edf2f7; padding: 2px 6px; border-radius: 4px;">${item.category}</span>
+                        ${fleetBaseText}
                         ${locationText}
                         <strong style="font-size: 18px; margin-top: 4px; display: block; color: #2d3748;">${item.name}</strong>
                         <span style="font-size: 13px; color: #4a5568;">S/N: <b>${item.serial}</b></span>
@@ -470,6 +559,108 @@
     window.deleteItem = async (id) => {
         if (confirm("Bu parçayı tamamen silmek istediğinize emin misiniz?")) { await deleteDoc(doc(db, "gso_envanter", id)); }
     };
+
+    // ================= FİLO ÖZEL YÖNETİM FONKSİYONLARI =================
+    window.openFleetDetail = (fleetName) => {
+        activeFleetName = fleetName;
+        document.getElementById('fleetDetailTitle').innerText = fleetName + " Hava Filosu";
+        navigateTo('fleetDetailPage');
+        renderFleetHeliList();
+    };
+
+    window.renderFleetHeliList = () => {
+        if (!activeFleetName) return;
+        const listDiv = document.getElementById('fleetHeliList');
+        listDiv.innerHTML = '';
+
+        const fleetHelis = cachedHelis.filter(h => h.fleet === activeFleetName);
+        if (fleetHelis.length === 0) {
+            listDiv.innerHTML = `<p style="color:#718096; font-style:italic; padding:10px 0;">Bu filoda konuşlu helikopter bulunmamaktadır.</p>`;
+            return;
+        }
+
+        fleetHelis.forEach(heli => {
+            const card = document.createElement('div');
+            card.className = 'item-card';
+            card.innerHTML = `
+                <div style="cursor:pointer;" onclick="goToHeliFromFleet('${heli.id}')">
+                    <strong>${heli.id}</strong>
+                    <span style="font-size:12px; color:#718096; display:block;">Detayları incelemek için tıkla</span>
+                </div>
+                <button class="btn-del" onclick="removeHeliFromFleet('${heli.id}')">Filodan Çıkar</button>
+            `;
+            listDiv.appendChild(card);
+        });
+    };
+
+    window.addNewHeliToFleet = async () => {
+        const input = document.getElementById('newHeliNameInput');
+        const heliId = input.value.trim().toUpperCase();
+        if(!heliId) { alert("Lütfen geçerli bir kuyruk numarası girin."); return; }
+
+        try {
+            await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId, fleet: activeFleetName }, { merge: true });
+            input.value = '';
+            alert(`${heliId} helikopteri başarıyla ${activeFleetName} filosuna eklendi.`);
+        } catch(e) { alert("Hata: " + e.message); }
+    };
+
+    window.removeHeliFromFleet = async (heliId) => {
+        if (confirm(`${heliId} aracını bu filodan çıkartıp üssüz duruma getirmek istiyor musunuz?`)) {
+            try {
+                await updateDoc(doc(db, "skorsky_helikopterler", heliId), { fleet: "" });
+                alert("Araç filodan ayrıldı.");
+            } catch(e) { alert("Hata: " + e.message); }
+        }
+    };
+
+    window.goToHeliFromFleet = (heliId) => {
+        originPage = 'fleetDetailPage'; // Geri dönülecek yeri filo detay ayarla
+        openHeliDetail(heliId);
+    };
+
+    // ================= İŞLEM GEÇMİŞİ LOG YÖNETİMİ =================
+    window.renderLogHistory = () => {
+        const listDiv = document.getElementById('logHistoryList');
+        if (!listDiv) return;
+        listDiv.innerHTML = '';
+
+        if (cachedLogs.length === 0) {
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Henüz kaydedilmiş bir işlem log kaydı bulunmuyor.</p>`;
+            return;
+        }
+
+        cachedLogs.forEach(log => {
+            const dateStr = log.timestamp ? new Date(log.timestamp.seconds * 1000).toLocaleString('tr-TR') : 'Yazılıyor...';
+            const logCard = document.createElement('div');
+            logCard.className = `log-item ${log.action.toLowerCase() === 'takıldı' ? 'takildi' : 'sokuldu'}`;
+            logCard.innerHTML = `
+                <div>
+                    <b style="color:#2c3e50;">[${log.action.toUpperCase()}]</b> ${log.partName} (S/N: ${log.serial})<br>
+                    <span style="color:#4a5568; font-size:12px;">${log.detail}</span><br>
+                    <span style="color:#a0aec0; font-size:11px;">${dateStr}</span>
+                </div>
+                <button onclick="deleteLog('${log.id}')" style="background:transparent; border:none; color:#e53e3e; cursor:pointer; font-weight:bold; font-size:15px; padding:0 5px;">×</button>
+            `;
+            listDiv.appendChild(logCard);
+        });
+    };
+
+    window.deleteLog = async (logId) => {
+        if (confirm("Bu log kaydını silmek istediğinize emin misiniz?")) {
+            await deleteDoc(doc(db, "islem_loglari", logId));
+        }
+    };
+
+    window.clearAllLogs = async () => {
+        if (confirm("TÜM İŞLEM GEÇMİŞİNİ kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz!")) {
+            // Firestore client-side toplu silme işlemi döngüyle sağlanır
+            for (const log of cachedLogs) {
+                await deleteDoc(doc(db, "islem_loglari", log.id));
+            }
+            alert("Tüm işlem geçmişi logları temizlendi.");
+        }
+    };
 </script>
 
 <script>
@@ -478,7 +669,6 @@
         document.getElementById(pageId).classList.add('active');
     }
 
-    // GSO Malzeme Sekmeleri Yönetimi
     function switchGsoSection(section) {
         document.getElementById('gsoSecAdd').classList.remove('active');
         document.getElementById('gsoSecList').classList.remove('active');
@@ -494,19 +684,14 @@
         }
     }
 
-    // KATALOG SEKME YÖNETİMİ (YENİ EKLEME)
     function switchCatalogTab(tab) {
-        // Tüm katalog alt bölümlerini kapat
         document.getElementById('catSecView').classList.remove('active');
         document.getElementById('catSecCounter').classList.remove('active');
         document.getElementById('catSecPayload').classList.remove('active');
-        
-        // Tüm buton aktiflik sınıflarını temizle
         document.getElementById('btnCatView').classList.remove('active');
         document.getElementById('btnCatCounter').classList.remove('active');
         document.getElementById('btnCatPayload').classList.remove('active');
 
-        // Seçilen sekmeyi aktifleştir
         if (tab === 'view') {
             document.getElementById('catSecView').classList.add('active');
             document.getElementById('btnCatView').classList.add('active');
