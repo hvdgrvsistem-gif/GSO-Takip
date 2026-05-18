@@ -51,9 +51,19 @@
         .btn-del { background: #e53e3e; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .btn-del:hover { background: #c53030; }
 
-        /* GSO İç Alt Menü Stilleri */
-        .gso-sub-section { display: none; margin-top: 15px; animation: fadeIn 0.2s ease; }
-        .gso-sub-section.active { display: block; }
+        /* Alt Menü Sekme Stilleri (GSO ve Katalog için ortak) */
+        .sub-menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .sub-tab-btn { padding: 12px 5px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 12px; text-align: center; }
+        .sub-tab-btn.active { background: #3182ce; color: white; border-color: #3182ce; }
+        
+        .sub-section { display: none; animation: fadeIn 0.2s ease; }
+        .sub-section.active { display: block; }
+
+        /* Katalog Detay Kartı Tasarımı */
+        .catalog-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 12px; }
+        .catalog-card h4 { color: #2c3e50; margin-bottom: 6px; font-size: 16px; border-bottom: 1px solid #edf2f7; padding-bottom: 4px; }
+        .catalog-card p { font-size: 13px; color: #4a5568; line-height: 1.5; }
+        .catalog-card ul { margin-top: 6px; padding-left: 20px; font-size: 13px; color: #4a5568; }
 
         @media (max-width: 400px) {
             .menu-grid { grid-template-columns: repeat(2, 1fr); }
@@ -126,11 +136,11 @@
         </div>
         
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px;">
-            <button id="btnSubAdd" onclick="switchGsoSection('add')" style="padding: 12px; font-weight: bold; border-radius: 6px; border: 2px solid #3182ce; background: #3182ce; color: white; cursor: pointer; text-transform: uppercase; font-size: 13px;">Malzeme Ekle / Düzenle</button>
-            <button id="btnSubList" onclick="switchGsoSection('list')" style="padding: 12px; font-weight: bold; border-radius: 6px; border: 2px solid #cbd5e0; background: white; color: #4a5568; cursor: pointer; text-transform: uppercase; font-size: 13px;">Malzeme Listesi</button>
+            <button id="btnSubAdd" onclick="switchGsoSection('add')" class="sub-tab-btn active">Malzeme Ekle / Düzenle</button>
+            <button id="btnSubList" onclick="switchGsoSection('list')" class="sub-tab-btn">Malzeme Listesi</button>
         </div>
 
-        <div id="gsoSecAdd" class="gso-sub-section active">
+        <div id="gsoSecAdd" class="sub-section active">
             <form id="materialForm" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
                 <h4 style="margin-bottom: 10px; color: #2c3e50;">Yeni Parça Girişi</h4>
                 <select id="matCategory" style="margin-bottom: 8px;" required>
@@ -151,7 +161,7 @@
             </form>
         </div>
 
-        <div id="gsoSecList" class="gso-sub-section">
+        <div id="gsoSecList" class="sub-section">
             <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 12px;">
                 <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
                 <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 8px 3px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜ</button>
@@ -162,7 +172,77 @@
         </div>
     </div>
 
-    <div id="katalogPage" class="page-content"><div class="page-title"><span>Katalog</span><button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Katalog dökümanları yakında burada.</p></div>
+    <div id="katalogPage" class="page-content">
+        <div class="page-title">
+            <span>Sistem Kataloğu</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
+        </div>
+
+        <div class="sub-menu-grid">
+            <button id="btnCatView" onclick="switchCatalogTab('view')" class="sub-tab-btn active">Görüntüleme</button>
+            <button id="btnCatCounter" onclick="switchCatalogTab('counter')" class="sub-tab-btn">Karşı Tedbir</button>
+            <button id="btnCatPayload" onclick="switchCatalogTab('payload')" class="sub-tab-btn">Harici Yük</button>
+        </div>
+
+        <div id="catSecView" class="sub-section active">
+            <div class="catalog-card">
+                <h4>FLIR (Termal Kamera Sistemi)</h4>
+                <p>Gece ve gündüz şartlarında pilotların görüş kabiliyetini artırmak, hedef tespiti ve teşhisi yapmak amacıyla kullanılan elektro-optik kızılötesi sistemdir.</p>
+                <ul>
+                    <li><b>Kullanım Amacı:</b> Hedefleme ve Keşif</li>
+                    <li><b>Optik Dalga Boyu:</b> MWIR (Orta Dalga Kızılötesi)</li>
+                    <li><b>Görüş Açısı:</b> Geniş, Orta ve Dar Sürekli Yakınlaştırma</li>
+                </ul>
+            </div>
+            <div class="catalog-card">
+                <h4>NVG (Gece Görüş Gözlüğü)</h4>
+                <p>Ortamdaki minimal ışığı (yıldız, ay ışığı) güçlendirerek gece uçuşlarında pilotlara görsel referans sağlayan kaska monteli sistem.</p>
+                <ul>
+                    <li><b>Tüp Nesli:</b> Gen 3 / Gen 4</li>
+                    <li><b>Fosfor Tipi:</b> Yeşil / Beyaz Fosfor seçenekleri</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="catSecCounter" class="sub-section">
+            <div class="catalog-card">
+                <h4>Chaff / Flare Dispenser</h4>
+                <p>Helikoptere yönelen radar güdümlü füzelere karşı Chaff (metalik bulut), ısı güdümlü füzelere karşı ise Flare (yüksek ısı yayan magnezyum fişekleri) fırlatan savunma sistemidir.</p>
+                <ul>
+                    <li><b>Mühimmat Kapasitesi:</b> 30/60 Hazne</li>
+                    <li><b>Ateşleme Modları:</b> Otomatik, Yarı Otomatik, Manuel</li>
+                </ul>
+            </div>
+            <div class="catalog-card">
+                <h4>MWS (Füze İkaz Sistemi)</h4>
+                <p>Helikoptere yaklaşan füzelerin motor egzoz morötesi (UV) veya kızılötesi (IR) izlerini tespit ederek pilotu uyaran ve karşı tedbir sistemini tetikleyen aktif sensör ağıdır.</p>
+                <ul>
+                    <li><b>Kapsama Alanı:</b> 360 Derece Küresel Koruma</li>
+                    <li><b>Tepki Süresi:</b> < 0.5 Saniye</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="catSecPayload" class="sub-section">
+            <div class="catalog-card">
+                <h4>Harici Yakıt Tankı (Auxiliary Fuel Tank)</h4>
+                <p>Helikopterin menzilini ve havada kalış süresini artırmak amacıyla kanat altı pilonlara veya kabin içerisine monte edilen ek yakıt depolama sistemidir.</p>
+                <ul>
+                    <li><b>Kapasite:</b> 230 / 450 Galon opsiyonları</li>
+                    <li><b>Güvenlik:</b> Kendini Sızdırmazlık (Self-Sealing) Özelliği</li>
+                </ul>
+            </div>
+            <div class="catalog-card">
+                <h4>Arama Kurtarma Vinci (Rescue Hoist)</h4>
+                <p>Helikopterin iniş yapamadığı engebeli, deniz veya ormanlık arazilerde personel ya da kazazedeleri yukarı çekmek amacıyla kullanılan hidrolik/elektrikli vinç sistemi.</p>
+                <ul>
+                    <li><b>Maksimum Taşıma:</b> 270 kg (600 lbs)</li>
+                    <li><b>Kablo Uzunluğu:</b> 75 Metre</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
     <div id="filolarPage" class="page-content"><div class="page-title"><span>Filolar</span><button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button></div><p style="color:#718096; text-align:center; padding:20px;">Filo bilgileri yakında burada.</p></div>
 
 </div>
@@ -192,17 +272,14 @@
     let cachedHelis = [];
     let activeHeliId = null;
 
-    // SİSTEM İLK AÇILDIĞINDA FİREBASE'DE HELİKOPTER YOKSA OTOMATİK KAYDEDER (KALICI DURUR)
     const initSkorskyHelis = async () => {
         const defaultHelis = ["SKORSKY-1001", "SKORSKY-1002", "SKORSKY-1003", "SKORSKY-1004"];
         defaultHelis.forEach(async (heliId) => {
-            // Firebase'de bu dokümanlar yoksa oluşturur, varsa üzerine yazmaz (merge: true)
             await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId }, { merge: true });
         });
     };
     initSkorskyHelis();
 
-    // 1. CANLI VERİ AKIŞI: Malzemeleri Firebase'den anlık çeker
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
         snapshot.forEach(docSnap => { cachedParts.push({ id: docSnap.id, ...docSnap.data() }); });
@@ -211,27 +288,23 @@
         updateDropdownAndDetail(); 
     });
 
-    // 2. CANLI VERİ AKIŞI: Helikopterleri tamamen Firebase'den anlık çeker
     onSnapshot(heliCollection, (snapshot) => {
         cachedHelis = [];
         snapshot.forEach(docSnap => { cachedHelis.push({ id: docSnap.id, ...docSnap.data() }); });
-        renderSkorskyList(); // Firebase'den yeni veri geldikçe listeyi yeniler
+        renderSkorskyList(); 
         updateDropdownAndDetail(); 
     });
 
-    // 3. SKORSKY LİSTESİNİ FİREBASE VERİLERİNE GÖRE EKRANA BASMA
     window.renderSkorskyList = () => {
         const listDiv = document.getElementById('skorskyListArea');
         if (!listDiv) return;
         listDiv.innerHTML = '';
 
-        // Eğer Firebase'den henüz helikopter yüklenmediyse uyarı ver
         if(cachedHelis.length === 0) {
             listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Firebase'den helikopterler bekleniyor...</p>`;
             return;
         }
 
-        // Alfabetik/Sayısal sıraya göre diz ve ekrana bas
         cachedHelis.sort((a, b) => a.id.localeCompare(b.id)).forEach(heli => {
             const attached = cachedParts.filter(part => part.assignedTo === heli.id);
             let previewText = "Takılı parça bulunmuyor.";
@@ -307,7 +380,6 @@
         }
     };
 
-    // GSO MALZEME EKLEME - MÜKERRER KONTROLÜ
     document.getElementById('materialForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const category = document.getElementById('matCategory').value;
@@ -399,33 +471,51 @@
         if (confirm("Bu parçayı tamamen silmek istediğinize emin misiniz?")) { await deleteDoc(doc(db, "gso_envanter", id)); }
     };
 </script>
-    <script>
+
+<script>
     function navigateTo(pageId) {
         document.querySelectorAll('.page-content').forEach(page => { page.classList.remove('active'); });
         document.getElementById(pageId).classList.add('active');
     }
 
-    // GSO Sayfası Alt Bölüm Geçiş Yönetimi (Ekleme Formu / Liste)
+    // GSO Malzeme Sekmeleri Yönetimi
     function switchGsoSection(section) {
         document.getElementById('gsoSecAdd').classList.remove('active');
         document.getElementById('gsoSecList').classList.remove('active');
-        document.getElementById('btnSubAdd').style.background = 'white';
-        document.getElementById('btnSubAdd').style.color = '#4a5568';
-        document.getElementById('btnSubAdd').style.borderColor = '#cbd5e0';
-        document.getElementById('btnSubList').style.background = 'white';
-        document.getElementById('btnSubList').style.color = '#4a5568';
-        document.getElementById('btnSubList').style.borderColor = '#cbd5e0';
+        document.getElementById('btnSubAdd').classList.remove('active');
+        document.getElementById('btnSubList').classList.remove('active');
 
         if (section === 'add') {
             document.getElementById('gsoSecAdd').classList.add('active');
-            document.getElementById('btnSubAdd').style.background = '#3182ce';
-            document.getElementById('btnSubAdd').style.color = 'white';
-            document.getElementById('btnSubAdd').style.borderColor = '#3182ce';
+            document.getElementById('btnSubAdd').classList.add('active');
         } else {
             document.getElementById('gsoSecList').classList.add('active');
-            document.getElementById('btnSubList').style.background = '#3182ce';
-            document.getElementById('btnSubList').style.color = 'white';
-            document.getElementById('btnSubList').style.borderColor = '#3182ce';
+            document.getElementById('btnSubList').classList.add('active');
+        }
+    }
+
+    // KATALOG SEKME YÖNETİMİ (YENİ EKLEME)
+    function switchCatalogTab(tab) {
+        // Tüm katalog alt bölümlerini kapat
+        document.getElementById('catSecView').classList.remove('active');
+        document.getElementById('catSecCounter').classList.remove('active');
+        document.getElementById('catSecPayload').classList.remove('active');
+        
+        // Tüm buton aktiflik sınıflarını temizle
+        document.getElementById('btnCatView').classList.remove('active');
+        document.getElementById('btnCatCounter').classList.remove('active');
+        document.getElementById('btnCatPayload').classList.remove('active');
+
+        // Seçilen sekmeyi aktifleştir
+        if (tab === 'view') {
+            document.getElementById('catSecView').classList.add('active');
+            document.getElementById('btnCatView').classList.add('active');
+        } else if (tab === 'counter') {
+            document.getElementById('catSecCounter').classList.add('active');
+            document.getElementById('btnCatCounter').classList.add('active');
+        } else if (tab === 'payload') {
+            document.getElementById('catSecPayload').classList.add('active');
+            document.getElementById('btnCatPayload').classList.add('active');
         }
     }
 
