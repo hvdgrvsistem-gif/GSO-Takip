@@ -3,58 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kolay Envanter Takip</title>
-    
-    <!-- PWA için Gerekli Manifest Baðlantýsý -->
+    <title>GSO Takip</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2196F3">
-    
+    <meta name="theme-color" content="#1a252f">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2196F3; margin-top: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f5f7fa; color: #333; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 20px; }
+        
+        .app-container { width: 100%; max-width: 600px; background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); overflow: hidden; padding: 20px; }
+        
+        /* Ana BaÅŸlÄ±k AlanÄ± */
+        .header-banner { background: #1a252f; color: white; padding: 25px; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+        
+        /* Buton IzgarasÄ± (Grid Layout) */
+        .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 10px; }
+        
+        /* MenÃ¼ ButonlarÄ± */
+        .menu-btn { background: #ffffff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 20px 10px; font-size: 13px; font-weight: bold; color: #2c3e50; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; min-height: 90px; text-transform: uppercase; }
+        .menu-btn:hover { background: #ebf8ff; border-color: #3182ce; color: #2b6cb0; transform: translateY(-2px); }
+        .menu-btn.disabled { background: #f7fafc; color: #a0aec0; border-color: #edf2f7; cursor: not-allowed; }
+        .menu-btn.disabled:hover { transform: none; background: #f7fafc; border-color: #edf2f7; color: #a0aec0; }
+        
+        /* Sayfa BÃ¶lÃ¼mleri (VarsayÄ±lan olarak gizli) */
+        .page-content { display: none; animation: fadeIn 0.3s ease; }
+        .page-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Ä°Ã§ Sayfa TasarÄ±mlarÄ± */
+        .page-title { font-size: 20px; color: #1a252f; margin-bottom: 15px; padding-bottom: 8px; border-bottom: 2px solid #3182ce; display: flex; justify-content: space-between; align-items: center; }
+        .btn-back { background: #718096; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .btn-back:hover { background: #4a5568; }
+
+        /* Form ve Liste TasarÄ±mlarÄ± */
         form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
-        button.btn-add { background-color: #2196F3; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; }
-        button.btn-add:hover { background-color: #1e88e5; }
-        .product-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 10px; background: #fafafa; }
-        .product-info strong { font-size: 18px; display: block; }
-        .product-info span { font-size: 16px; color: #666; }
-        .stock-count { font-weight: bold; }
-        .stock-count.low { color: #d32f2f; }
-        .stock-count.good { color: #388e3c; }
-        .actions { display: flex; gap: 8px; align-items: center; }
-        .btn-action { width: 40px; height: 40px; font-size: 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-minus { background-color: #e0e0e0; color: #333; }
-        .btn-plus { background-color: #4caf50; color: white; }
-        .btn-delete { background-color: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; height: 40px; }
+        input { padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; width: 100%; }
+        .btn-submit { background: #3182ce; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 15px; cursor: pointer; font-weight: bold; }
+        .btn-submit:hover { background: #2b6cb0; }
+        .item-card { display: flex; justify-content: space-between; align-items: center; padding: 14px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 10px; background: #f8fafc; }
+        .item-info strong { font-size: 16px; display: block; color: #2d3748; }
+        .item-info span { font-size: 14px; color: #718096; }
+        .stock-tag { font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+        .stock-tag.low { background: #fed7d7; color: #9b2c2c; }
+        .stock-tag.good { background: #c6f6d5; color: #22543d; }
+        .actions { display: flex; gap: 6px; }
+        .btn-qty { width: 34px; height: 34px; font-size: 16px; border: 1px solid #cbd5e0; background: white; border-radius: 4px; cursor: pointer; }
+        .btn-qty:hover { background: #edf2f7; }
+        .btn-del { background: #e53e3e; color: white; border: none; padding: 0 10px; border-radius: 4px; cursor: pointer; }
+        .btn-del:hover { background: #c53030; }
+
+        /* Telefonlar iÃ§in Grid AyarÄ± (Ekran Ã§ok kÃ¼Ã§Ã¼kse 2 sÃ¼tuna dÃ¼ÅŸer) */
+        @media (max-width: 400px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Envanter Takip</h1>
-    
-    <!-- Ürün Ekleme Formu -->
-    <form id="productForm">
-        <input type="text" id="productName" placeholder="Ürün Adý" required>
-        <input type="number" id="productStock" placeholder="Baþlangýç Stoku" required min="0">
-        <button type="submit" class="btn-add">Ürünü Listeye Ekle</button>
-    </form>
+<div class="app-container">
 
-    <!-- Ürün Listesi Bölümü -->
-    <div id="productList">
-        <!-- Veriler JavaScript ile buraya akacak -->
+    <div id="mainMenu" class="page-content active">
+        <div class="header-banner">GSO TAKÄ°P</div>
+        <div class="menu-grid">
+            <div class="menu-btn" onclick="navigateTo('helikopterlerPage')">Helikopterler</div>
+            <div class="menu-btn" onclick="navigateTo('gsoMalzemelerPage')">GSO Malzemeler</div>
+            <div class="menu-btn" onclick="navigateTo('katalogPage')">Katalog</div>
+            <div class="menu-btn" onclick="navigateTo('filolarPage')">Filolar</div>
+            <div class="menu-btn disabled">To Be Decided</div>
+            <div class="menu-btn disabled">To Be Decided</div>
+        </div>
     </div>
+
+    <div id="helikopterlerPage" class="page-content">
+        <div class="page-title">
+            <span>Helikopterler</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
+        </div>
+        <p style="color:#718096; text-align:center; padding:20px;">Helikopter listesi ve takibi yakÄ±nda burada olacak.</p>
+    </div>
+
+    <div id="gsoMalzemelerPage" class="page-content">
+        <div class="page-title">
+            <span>GSO Malzemeler</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
+        </div>
+        
+        <form id="materialForm">
+            <input type="text" id="matName" placeholder="Malzeme AdÄ±" required>
+            <input type="number" id="matStock" placeholder="BaÅŸlangÄ±Ã§ Stoku" required min="0">
+            <button type="submit" class="btn-submit">Malzeme Ekle</button>
+        </form>
+
+        <div id="materialList">/* Veriler buraya yÃ¼klenecek */</div>
+    </div>
+
+    <div id="katalogPage" class="page-content">
+        <div class="page-title">
+            <span>Katalog</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
+        </div>
+        <p style="color:#718096; text-align:center; padding:20px;">Katalog dÃ¶kÃ¼manlarÄ± ve parÃ§a listeleri yakÄ±nda burada olacak.</p>
+    </div>
+
+    <div id="filolarPage" class="page-content">
+        <div class="page-title">
+            <span>Filolar</span>
+            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
+        </div>
+        <p style="color:#718096; text-align:center; padding:20px;">Filo bilgileri ve konum eÅŸleÅŸtirmeleri yakÄ±nda burada olacak.</p>
+    </div>
+
 </div>
 
-<!-- Firebase Modülleri (CDN üzerinden yüklüyoruz) -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc } 
     from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // TODO: Kendi Firebase bilgilerini buraya yapýþtýr
+    // BURAYA KENDÄ° FÄ°REBASE YAPILANDIRMANI YAPIÅžTIR
     const firebaseConfig = {
         apiKey: "YOUR_API_KEY",
         authDomain: "YOUR_AUTH_DOMAIN",
@@ -64,77 +130,76 @@
         appId: "YOUR_APP_ID"
     };
 
-    // Firebase'i baþlat ve Firestore referansýný al
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const productsCollection = collection(db, "products");
+    const gsoCollection = collection(db, "gso_malzemeler"); // Firebase'de temiz bir koleksiyon adÄ±
 
-    // Formu dinle ve yeni ürün ekle
-    document.getElementById('productForm').addEventListener('submit', async (e) => {
+    // GSO Malzeme Ekleme
+    document.getElementById('materialForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('productName').value;
-        const stock = parseInt(document.getElementById('productStock').value);
-
+        const name = document.getElementById('matName').value;
+        const stock = parseInt(document.getElementById('matStock').value);
         try {
-            await addDoc(productsCollection, { name, stock });
-            document.getElementById('productForm').reset();
-        } catch (error) {
-            alert("Hata oluþtu: " + error.message);
-        }
+            await addDoc(gsoCollection, { name, stock });
+            document.getElementById('materialForm').reset();
+        } catch (error) { alert("Hata: " + error.message); }
     });
 
-    // Firestore'dan verileri anlýk (real-time) çek ve listele
-    onSnapshot(productsCollection, (snapshot) => {
-        const productListDiv = document.getElementById('productList');
-        productListDiv.innerHTML = ''; // Önceki listeyi temizle
-
+    // Verileri Dinleme ve Listeleme
+    onSnapshot(gsoCollection, (snapshot) => {
+        const listDiv = document.getElementById('materialList');
+        listDiv.innerHTML = '';
         snapshot.forEach((docSnap) => {
-            const product = docSnap.data();
+            const item = docSnap.data();
             const id = docSnap.id;
-
             const card = document.createElement('div');
-            card.className = 'product-card';
-            
-            // Stok durumuna göre renk sýnýfý belirle (5'ten az ise kýrmýzý, deðilse yeþil)
-            const stockClass = product.stock < 5 ? 'stock-count low' : 'stock-count good';
+            card.className = 'item-card';
+            const stockClass = item.stock < 3 ? 'stock-tag low' : 'stock-tag good';
 
             card.innerHTML = `
-                <div class="product-info">
-                    <strong>${product.name}</strong>
-                    <span>Stok: <span class="${stockClass}">${product.stock}</span></span>
+                <div class="item-info">
+                    <strong>${item.name}</strong>
+                    <span>Stok: <span class="${stockClass}">${item.stock} Adet</span></span>
                 </div>
                 <div class="actions">
-                    <button class="btn-action btn-minus" onclick="changeStock('${id}', ${product.stock}, -1)">-</button>
-                    <button class="btn-action btn-plus" onclick="changeStock('${id}', ${product.stock}, 1)">+</button>
-                    <button class="btn-delete" onclick="deleteProduct('${id}')">Sil</button>
+                    <button class="btn-qty" onclick="changeStock('${id}', ${item.stock}, -1)">-</button>
+                    <button class="btn-qty" onclick="changeStock('${id}', ${item.stock}, 1)">+</button>
+                    <button class="btn-del" onclick="deleteItem('${id}')">Sil</button>
                 </div>
             `;
-            productListDiv.appendChild(card);
+            listDiv.appendChild(card);
         });
     });
 
-    // Stok Artýrma ve Azaltma Fonksiyonu
+    // Stok GÃ¼ncelleme
     window.changeStock = async (id, currentStock, amount) => {
         const newStock = currentStock + amount;
-        if (newStock < 0) return; // Stok sýfýrýn altýna düþmesin
-        const productRef = doc(db, "products", id);
-        await updateDoc(productRef, { stock: newStock });
+        if (newStock < 0) return;
+        await updateDoc(doc(db, "gso_malzemeler", id), { stock: newStock });
     };
 
-    // Ürün Silme Fonksiyonu
-    window.deleteProduct = async (id) => {
-        if (confirm("Bu ürünü silmek istediðinize emin misiniz?")) {
-            await deleteDoc(doc(db, "products", id));
+    // ÃœrÃ¼n Silme
+    window.deleteItem = async (id) => {
+        if (confirm("Bu malzemeyi silmek istediÄŸinize emin misiniz?")) {
+            await deleteDoc(doc(db, "gso_malzemeler", id));
         }
     };
 </script>
 
-<!-- PWA Service Worker Kaydý -->
+<script>
+    function navigateTo(pageId) {
+        // TÃ¼m sayfalarÄ± gizle
+        document.querySelectorAll('.page-content').forEach(page => {
+            page.classList.remove('active');
+        });
+        // Ä°stenen sayfayÄ± gÃ¶ster
+        document.getElementById(pageId).classList.add('active');
+    }
+</script>
+
 <script>
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("PWA aktif edildi."))
-            .catch(err => console.log("Service Worker hatasý:", err));
+        navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
     }
 </script>
 
