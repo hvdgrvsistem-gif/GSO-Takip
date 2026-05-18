@@ -113,19 +113,56 @@
 </div>
 
     <div id="gsoMalzemelerPage" class="page-content">
-        <div class="page-title">
-            <span>GSO Malzemeler</span>
-            <button class="btn-back" onclick="navigateTo('mainMenu')">Geri</button>
-        </div>
-        
-        <form id="materialForm">
-            <input type="text" id="matName" placeholder="Malzeme Adı" required>
-            <input type="number" id="matStock" placeholder="Başlangıç Stoku" required min="0">
-            <button type="submit" class="btn-submit">Malzeme Ekle</button>
-        </form>
-
-        <div id="materialList">/* Veriler buraya yüklenecek */</div>
+    <div class="page-title">
+        <span>GSO Malzemeler</span>
+        <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
     </div>
+    
+    <form id="materialForm">
+        <input type="text" id="matName" placeholder="Malzeme / Parça Adı" required>
+        <input type="number" id="matStock" placeholder="Başlangıç Stoku" required min="0">
+        
+        <select id="matCategory" style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; background: white; width: 100%;" required>
+            <option value="" disabled selected>Kategori Seçiniz...</option>
+            <option value="görüntüleme">Görüntüleme Sistemleri</option>
+            <option value="karşı tedbir">Karşı Tedbir Sistemleri</option>
+            <option value="yangın söndürme">Yangın Söndürme</option>
+            <option value="harici yük">Harici Yük</option>
+            <option value="diğer">Diğer / Genel</option>
+        </select>
+        
+        <button type="submit" class="btn-submit">Malzemeyi Sisteme İşle</button>
+    </form>
+
+    <div id="kategorizeListeler">
+        
+        <div class="kategori-blok">
+            <h3 style="margin: 15px 0 10px 0; color: #2c3e50; border-left: 4px solid #3182ce; padding-left: 8px; font-size: 16px;">Görüntüleme Sistemleri</h3>
+            <div id="liste-görüntüleme"></div>
+        </div>
+
+        <div class="kategori-blok">
+            <h3 style="margin: 25px 0 10px 0; color: #2c3e50; border-left: 4px solid #e53e3e; padding-left: 8px; font-size: 16px;">Karşı Tedbir Sistemleri</h3>
+            <div id="liste-karşı tedbir"></div>
+        </div>
+
+        <div class="kategori-blok">
+            <h3 style="margin: 25px 0 10px 0; color: #2c3e50; border-left: 4px solid #dd6b20; padding-left: 8px; font-size: 16px;">Yangın Söndürme</h3>
+            <div id="liste-yangın söndürme"></div>
+        </div>
+
+        <div class="kategori-blok">
+            <h3 style="margin: 25px 0 10px 0; color: #2c3e50; border-left: 4px solid #38a169; padding-left: 8px; font-size: 16px;">Harici Yük</h3>
+            <div id="liste-harici yük"></div>
+        </div>
+
+        <div class="kategori-blok">
+            <h3 style="margin: 25px 0 10px 0; color: #718096; border-left: 4px solid #718096; padding-left: 8px; font-size: 16px;">Diğer / Genel</h3>
+            <div id="liste-diğer"></div>
+        </div>
+
+    </div>
+</div>
 
     <div id="katalogPage" class="page-content">
         <div class="page-title">
@@ -145,43 +182,66 @@
 
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc } 
-    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc } 
+from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // BURAYA KENDİ FİREBASE YAPILANDIRMANI YAPIŞTIR
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+// BURAYA KENDİ FİREBASE YAPILANDIRMANI YAPIŞTIRIN
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const gsoCollection = collection(db, "gso_malzemeler"); // Firebase'de temiz bir koleksiyon adı
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const gsoCollection = collection(db, "gso_malzemeler");
 
-    // GSO Malzeme Ekleme
-    document.getElementById('materialForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = document.getElementById('matName').value;
-        const stock = parseInt(document.getElementById('matStock').value);
-        try {
-            await addDoc(gsoCollection, { name, stock });
-            document.getElementById('materialForm').reset();
-        } catch (error) { alert("Hata: " + error.message); }
+// Kategori Esnekliğine Sahip Malzeme Ekleme Fonksiyonu
+document.getElementById('materialForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('matName').value;
+    const stock = parseInt(document.getElementById('matStock').value);
+    const category = document.getElementById('matCategory').value; // Seçilen kategori
+
+    try {
+        await addDoc(gsoCollection, { 
+            name: name, 
+            stock: stock, 
+            category: category // Firebase'e yeni kolon olarak ekleniyor
+        });
+        document.getElementById('materialForm').reset();
+    } catch (error) { 
+        alert("Veritabanı Hatası: " + error.message); 
+    }
+});
+
+// Anlık (Real-time) Canlı Güncelleme ve Kategorilere Dağıtma Fonksiyonu
+onSnapshot(gsoCollection, (snapshot) => {
+    // Önce tüm alt liste kutularını temizle
+    const kategoriler = ['görüntüleme', 'karşı tedbir', 'yangın söndürme', 'harici yük', 'diğer'];
+    kategoriler.forEach(kat => {
+        const div = document.getElementById(`liste-${kat}`);
+        if(div) div.innerHTML = `<p style="color:#a0aec0; font-size:13px; font-style:italic; padding: 5px 0;">Bu kategoride malzeme bulunmuyor.</p>`;
     });
 
-    // Verileri Dinleme ve Listeleme
-    onSnapshot(gsoCollection, (snapshot) => {
-        const listDiv = document.getElementById('materialList');
-        listDiv.innerHTML = '';
-        snapshot.forEach((docSnap) => {
-            const item = docSnap.data();
-            const id = docSnap.id;
+    // Firebase'den gelen her dökümanı tara
+    snapshot.forEach((docSnap) => {
+        const item = docSnap.data();
+        const id = docSnap.id;
+        
+        // Malzemenin ait olduğu kategori kutusunu bul
+        const targetListDiv = document.getElementById(`liste-${item.category || 'diğer'}`);
+        
+        if (targetListDiv) {
+            // Eğer kutuda ilk defa eleman listelenecekse varsayılan "boş" yazısını sil
+            if (targetListDiv.innerHTML.includes("bulunmuyor")) {
+                targetListDiv.innerHTML = '';
+            }
+
             const card = document.createElement('div');
             card.className = 'item-card';
             const stockClass = item.stock < 3 ? 'stock-tag low' : 'stock-tag good';
@@ -189,7 +249,7 @@
             card.innerHTML = `
                 <div class="item-info">
                     <strong>${item.name}</strong>
-                    <span>Stok: <span class="${stockClass}">${item.stock} Adet</span></span>
+                    <span>Mevcut: <span class="${stockClass}">${item.stock} Adet</span></span>
                 </div>
                 <div class="actions">
                     <button class="btn-qty" onclick="changeStock('${id}', ${item.stock}, -1)">-</button>
@@ -197,24 +257,24 @@
                     <button class="btn-del" onclick="deleteItem('${id}')">Sil</button>
                 </div>
             `;
-            listDiv.appendChild(card);
-        });
-    });
-
-    // Stok Güncelleme
-    window.changeStock = async (id, currentStock, amount) => {
-        const newStock = currentStock + amount;
-        if (newStock < 0) return;
-        await updateDoc(doc(db, "gso_malzemeler", id), { stock: newStock });
-    };
-
-    // Ürün Silme
-    window.deleteItem = async (id) => {
-        if (confirm("Bu malzemeyi silmek istediğinize emin misiniz?")) {
-            await deleteDoc(doc(db, "gso_malzemeler", id));
+            targetListDiv.appendChild(card);
         }
-    };
-</script>
+    });
+});
+
+// Stok Güncelleme Mekanizması (Aynen Korundu)
+window.changeStock = async (id, currentStock, amount) => {
+    const newStock = currentStock + amount;
+    if (newStock < 0) return;
+    await updateDoc(doc(db, "gso_malzemeler", id), { stock: newStock });
+};
+
+// Ürün Silme Mekanizması (Aynen Korundu)
+window.deleteItem = async (id) => {
+    if (confirm("Bu malzemeyi sistemden tamamen silmek istediğinize emin misiniz?")) {
+        await deleteDoc(doc(db, "gso_malzemeler", id));
+    }
+};
 
 <script>
     function navigateTo(pageId) {
