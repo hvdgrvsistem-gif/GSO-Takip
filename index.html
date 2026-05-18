@@ -192,16 +192,17 @@
     let cachedHelis = [];
     let activeHeliId = null;
 
-    // Sabit Helikopterleri Başlatma
+    // SİSTEM İLK AÇILDIĞINDA FİREBASE'DE HELİKOPTER YOKSA OTOMATİK KAYDEDER (KALICI DURUR)
     const initSkorskyHelis = async () => {
         const defaultHelis = ["SKORSKY-1001", "SKORSKY-1002", "SKORSKY-1003", "SKORSKY-1004"];
         defaultHelis.forEach(async (heliId) => {
+            // Firebase'de bu dokümanlar yoksa oluşturur, varsa üzerine yazmaz (merge: true)
             await setDoc(doc(db, "skorsky_helikopterler", heliId), { name: heliId }, { merge: true });
         });
     };
     initSkorskyHelis();
 
-    // Veri Akışlarını Canlı Dinleme
+    // 1. CANLI VERİ AKIŞI: Malzemeleri Firebase'den anlık çeker
     onSnapshot(gsoCollection, (snapshot) => {
         cachedParts = [];
         snapshot.forEach(docSnap => { cachedParts.push({ id: docSnap.id, ...docSnap.data() }); });
@@ -210,45 +211,27 @@
         updateDropdownAndDetail(); 
     });
 
+    // 2. CANLI VERİ AKIŞI: Helikopterleri tamamen Firebase'den anlık çeker
     onSnapshot(heliCollection, (snapshot) => {
         cachedHelis = [];
         snapshot.forEach(docSnap => { cachedHelis.push({ id: docSnap.id, ...docSnap.data() }); });
-        renderSkorskyList(); 
+        renderSkorskyList(); // Firebase'den yeni veri geldikçe listeyi yeniler
         updateDropdownAndDetail(); 
     });
 
-    // PARÇA EKLEME - MÜKERRER SERİ NUMARASI ENGELLEME SİSTEMİ
-    document.getElementById('materialForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const category = document.getElementById('matCategory').value;
-        const name = document.getElementById('matName').value;
-        const serial = document.getElementById('matSerial').value.trim(); // Boşlukları temizle
-        const status = document.getElementById('matStatus').value;
-        const desc = document.getElementById('matDesc').value || "Açıklama yok.";
-
-        // Kritik Kontrol: Aynı S/N'e sahip parça yerel önbellekte var mı?
-        const isDuplicate = cachedParts.some(part => part.serial.toLowerCase() === serial.toLowerCase());
-        
-        if (isDuplicate) {
-            alert(`Kayıt Reddedildi!\n"${serial}" Seri Numaralı (S/N) bir parça sistemde zaten mevcut. Mükerrer kayda izin verilmez.`);
-            return; // Fonksiyonu burada kes, veritabanına ekleme yapma
-        }
-
-        try {
-            await addDoc(gsoCollection, { category, name, serial, status, desc, assignedTo: null });
-            document.getElementById('materialForm').reset();
-            document.getElementById('matStatus').value = "Faal";
-            alert("Parça başarıyla envantere eklendi.");
-            switchGsoSection('list'); // Eklendikten sonra listeyi otomatik aç
-        } catch (error) { alert("Hata: " + error.message); }
-    });
-
-    // Helikopter Listesi Önizleme Ekranda Gösterme
+    // 3. SKORSKY LİSTESİNİ FİREBASE VERİLERİNE GÖRE EKRANA BASMA
     window.renderSkorskyList = () => {
         const listDiv = document.getElementById('skorskyListArea');
         if (!listDiv) return;
         listDiv.innerHTML = '';
 
+        // Eğer Firebase'den henüz helikopter yüklenmediyse uyarı ver
+        if(cachedHelis.length === 0) {
+            listDiv.innerHTML = `<p style="text-align:center; color:#718096; padding:20px;">Firebase'den helikopterler bekleniyor...</p>`;
+            return;
+        }
+
+        // Alfabetik/Sayısal sıraya göre diz ve ekrana bas
         cachedHelis.sort((a, b) => a.id.localeCompare(b.id)).forEach(heli => {
             const attached = cachedParts.filter(part => part.assignedTo === heli.id);
             let previewText = "Takılı parça bulunmuyor.";
@@ -324,6 +307,30 @@
         }
     };
 
+    // GSO MALZEME EKLEME - MÜKERRER KONTROLÜ
+    document.getElementById('materialForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const category = document.getElementById('matCategory').value;
+        const name = document.getElementById('matName').value;
+        const serial = document.getElementById('matSerial').value.trim();
+        const status = document.getElementById('matStatus').value;
+        const desc = document.getElementById('matDesc').value || "Açıklama yok.";
+
+        const isDuplicate = cachedParts.some(part => part.serial.toLowerCase() === serial.toLowerCase());
+        if (isDuplicate) {
+            alert(`Kayıt Reddedildi!\n"${serial}" Seri Numaralı (S/N) bir parça sistemde zaten mevcut.`);
+            return;
+        }
+
+        try {
+            await addDoc(gsoCollection, { category, name, serial, status, desc, assignedTo: null });
+            document.getElementById('materialForm').reset();
+            document.getElementById('matStatus').value = "Faal";
+            alert("Parça başarıyla envantere eklendi.");
+            switchGsoSection('list'); 
+        } catch (error) { alert("Hata: " + error.message); }
+    });
+
     window.renderList = () => {
         const listDiv = document.getElementById('dynamicMaterialList');
         if(!listDiv) return;
@@ -392,8 +399,7 @@
         if (confirm("Bu parçayı tamamen silmek istediğinize emin misiniz?")) { await deleteDoc(doc(db, "gso_envanter", id)); }
     };
 </script>
-
-<script>
+    <script>
     function navigateTo(pageId) {
         document.querySelectorAll('.page-content').forEach(page => { page.classList.remove('active'); });
         document.getElementById(pageId).classList.add('active');
