@@ -118,6 +118,40 @@
         <button class="btn-back" onclick="navigateTo('mainMenu')">Ana Menü</button>
     </div>
     
+    <form id="materialForm" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+        <h4 style="margin-bottom: 10px; color: #2c3e50;">Yeni Parça Girişi</h4>
+        
+        <select id="matCategory" style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; background: white; width: 100%; margin-bottom: 8px;" required>
+            <option value="" disabled selected>Parça Türü Seçiniz...</option>
+            <option value="görüntüleme">Görüntüleme</option>
+            <option value="karşı tedbir">Karşı Tedbir</option>
+            <option value="harici yük">Harici Yük</option>
+        </select>
+        
+        <input type="text" id="matName" placeholder="Parça Adı" required style="margin-bottom: 8px;">
+        <input type="text" id="matSerial" placeholder="Seri Numarası (S/N)" required style="margin-bottom: 8px;">
+        
+        <select id="matStatus" style="padding: 12px; border: 1px solid #cbd5e0; border-radius: 6px; font-size: 15px; background: white; width: 100%; margin-bottom: 8px;" required>
+            <option value="Faal" selected>Faal</option>
+            <option value="Gayri Faal">Gayri Faal</option>
+            <option value="Onarımda">Onarımda</option>
+        </select>
+        
+        <input type="text" id="matDesc" placeholder="Açıklama (Opsiyonel)" style="margin-bottom: 8px;">
+        
+        <button type="submit" class="btn-submit">Parçayı Kaydet</button>
+    </form>
+
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; margin: 20px 0 10px 0;">
+        <button onclick="filterList('hepsi')" id="btn-filter-hepsi" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: #3182ce; color: white;">HEPSİ</button>
+        <button onclick="filterList('görüntüleme')" id="btn-filter-görüntüleme" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">GÖRÜNTÜLEME</button>
+        <button onclick="filterList('karşı tedbir')" id="btn-filter-karşı tedbir" style="padding: 10px 5px; font-size: 11px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">KARŞI TEDBİR</button>
+        <button onclick="filterList('harici yük')" id="btn-filter-harici yük" style="padding: 10px 5px; font-size: 12px; font-weight: bold; border: 1px solid #cbd5e0; border-radius: 4px; cursor: pointer; background: white; color: #333;">HARİCİ YÜK</button>
+    </div>
+
+    <div id="dynamicMaterialList">/* Firebase verileri buraya akacak */</div>
+</div>
+    
     <form id="materialForm">
         <input type="text" id="matName" placeholder="Malzeme / Parça Adı" required>
         <input type="number" id="matStock" placeholder="Başlangıç Stoku" required min="0">
@@ -181,7 +215,7 @@
     </div>
 
 </div>
-
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc } 
 from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -199,83 +233,131 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const gsoCollection = collection(db, "gso_malzemeler");
+const gsoCollection = collection(db, "gso_envanter"); // Yeni temiz koleksiyon ismi
 
-// Kategori Esnekliğine Sahip Malzeme Ekleme Fonksiyonu
+let currentFilter = 'hepsi'; // Anlık aktif filtre durumu
+let cachedDocs = []; // Ekranı filtrelerken Firebase'i yormamak için yerel bellek
+
+// Gelişmiş Parça Ekleme
 document.getElementById('materialForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const category = document.getElementById('matCategory').value;
     const name = document.getElementById('matName').value;
-    const stock = parseInt(document.getElementById('matStock').value);
-    const category = document.getElementById('matCategory').value; // Seçilen kategori
+    const serial = document.getElementById('matSerial').value;
+    const status = document.getElementById('matStatus').value;
+    const desc = document.getElementById('matDesc').value || "Açıklama yok.";
 
     try {
-        await addDoc(gsoCollection, { 
-            name: name, 
-            stock: stock, 
-            category: category // Firebase'e yeni kolon olarak ekleniyor
+        await addDoc(gsoCollection, {
+            category,
+            name,
+            serial,
+            status,
+            desc
         });
         document.getElementById('materialForm').reset();
+        document.getElementById('matStatus').value = "Faal"; // Default ayar
     } catch (error) { 
-        alert("Veritabanı Hatası: " + error.message); 
+        alert("Hata: " + error.message); 
     }
 });
 
-// Anlık (Real-time) Canlı Güncelleme ve Kategorilere Dağıtma Fonksiyonu
+// Verileri Canlı Dinleme
 onSnapshot(gsoCollection, (snapshot) => {
-    // Önce tüm alt liste kutularını temizle
-    const kategoriler = ['görüntüleme', 'karşı tedbir', 'yangın söndürme', 'harici yük', 'diğer'];
-    kategoriler.forEach(kat => {
-        const div = document.getElementById(`liste-${kat}`);
-        if(div) div.innerHTML = `<p style="color:#a0aec0; font-size:13px; font-style:italic; padding: 5px 0;">Bu kategoride malzeme bulunmuyor.</p>`;
+    cachedDocs = [];
+    snapshot.forEach(docSnap => {
+        cachedDocs.push({ id: docSnap.id, ...docSnap.data() });
     });
+    renderList(); // Listeyi ekrana bas
+});
 
-    // Firebase'den gelen her dökümanı tara
-    snapshot.forEach((docSnap) => {
-        const item = docSnap.data();
-        const id = docSnap.id;
-        
-        // Malzemenin ait olduğu kategori kutusunu bul
-        const targetListDiv = document.getElementById(`liste-${item.category || 'diğer'}`);
-        
-        if (targetListDiv) {
-            // Eğer kutuda ilk defa eleman listelenecekse varsayılan "boş" yazısını sil
-            if (targetListDiv.innerHTML.includes("bulunmuyor")) {
-                targetListDiv.innerHTML = '';
-            }
+// Listeyi Filtreye Göre Ekrana Basma Fonksiyonu
+window.renderList = () => {
+    const listDiv = document.getElementById('dynamicMaterialList');
+    listDiv.innerHTML = '';
 
-            const card = document.createElement('div');
-            card.className = 'item-card';
-            const stockClass = item.stock < 3 ? 'stock-tag low' : 'stock-tag good';
+    // Seçili filtreye göre verileri ayıkla
+    const filteredData = cachedDocs.filter(item => currentFilter === 'hepsi' || item.category === currentFilter);
 
-            card.innerHTML = `
-                <div class="item-info">
-                    <strong>${item.name}</strong>
-                    <span>Mevcut: <span class="${stockClass}">${item.stock} Adet</span></span>
+    if (filteredData.length === 0) {
+        listDiv.innerHTML = `<p style="color:#718096; text-align:center; padding:20px; font-style:italic;">Bu filtreye uygun kayıtlı parça bulunamadı.</p>`;
+        return;
+    }
+
+    filteredData.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'stretch';
+        card.style.gap = '10px';
+
+        // Duruma göre renk kodu belirleme
+        let statusColor = '#2f855a'; // Faal -> Yeşil
+        if (item.status === 'Gayri Faal') statusColor = '#c53030'; // Kırmızı
+        if (item.status === 'Onarımda') statusColor = '#dd6b20'; // Turuncu
+
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                    <span style="font-size: 11px; font-weight: bold; color: #718096; text-transform: uppercase; background: #edf2f7; padding: 2px 6px; border-radius: 4px;">${item.category}</span>
+                    <strong style="font-size: 18px; margin-top: 4px; display: block; color: #2d3748;">${item.name}</strong>
+                    <span style="font-size: 13px; color: #4a5568;">S/N: <b>${item.serial}</b></span>
                 </div>
-                <div class="actions">
-                    <button class="btn-qty" onclick="changeStock('${id}', ${item.stock}, -1)">-</button>
-                    <button class="btn-qty" onclick="changeStock('${id}', ${item.stock}, 1)">+</button>
-                    <button class="btn-del" onclick="deleteItem('${id}')">Sil</button>
-                </div>
-            `;
-            targetListDiv.appendChild(card);
+                <button class="btn-del" onclick="deleteItem('${item.id}')" style="height: 30px; font-size: 12px;">Sil</button>
+            </div>
+            
+            <div style="display: flex; gap: 8px; align-items: center; background: #fff; padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0;">
+                
+                <select onchange="updateItemField('${item.id}', 'status', this.value)" style="padding: 6px; border-radius: 4px; border: 1px solid #cbd5e0; font-size: 13px; font-weight: bold; color: white; background: ${statusColor};">
+                    <option value="Faal" ${item.status === 'Faal' ? 'selected' : ''}>Faal</option>
+                    <option value="Gayri Faal" ${item.status === 'Gayri Faal' ? 'selected' : ''}>Gayri Faal</option>
+                    <option value="Onarımda" ${item.status === 'Onarımda' ? 'selected' : ''}>Onarımda</option>
+                </select>
+
+                <input type="text" value="${item.desc}" onchange="updateItemField('${item.id}', 'desc', this.value)" style="padding: 6px; font-size: 13px; border: 1px solid #edf2f7; background: #fafafa; border-radius: 4px;" title="Değiştirmek için yazıp Enter'a basın veya dışarı tıklayın">
+            </div>
+        `;
+        listDiv.appendChild(card);
+    });
+};
+
+// Filtre Buton Kontrolü
+window.filterList = (filterType) => {
+    currentFilter = filterType;
+    
+    // Butonların renk stillerini güncelle aktif olanı boya
+    const filters = ['hepsi', 'görüntüleme', 'karşı tedbir', 'harici yük'];
+    filters.forEach(f => {
+        const btn = document.getElementById(`btn-filter-${f}`);
+        if(f === filterType) {
+            btn.style.background = '#3182ce';
+            btn.style.color = 'white';
+        } else {
+            btn.style.background = 'white';
+            btn.style.color = '#333';
         }
     });
-});
-
-// Stok Güncelleme Mekanizması (Aynen Korundu)
-window.changeStock = async (id, currentStock, amount) => {
-    const newStock = currentStock + amount;
-    if (newStock < 0) return;
-    await updateDoc(doc(db, "gso_malzemeler", id), { stock: newStock });
+    
+    renderList(); // Filtrelenmiş listeyi tekrar bas
 };
 
-// Ürün Silme Mekanizması (Aynen Korundu)
-window.deleteItem = async (id) => {
-    if (confirm("Bu malzemeyi sistemden tamamen silmek istediğinize emin misiniz?")) {
-        await deleteDoc(doc(db, "gso_malzemeler", id));
+// Satır İçi Veri Güncelleme (Durum veya Açıklama değiştiğinde tetiklenir)
+window.updateItemField = async (id, field, value) => {
+    try {
+        const itemRef = doc(db, "gso_envanter", id);
+        await updateDoc(itemRef, { [field]: value });
+    } catch (error) {
+        alert("Güncelleme hatası: " + error.message);
     }
 };
+
+// Parça Silme
+window.deleteItem = async (id) => {
+    if (confirm("Bu parçayı sistemden tamamen silmek istediğinize emin misiniz?")) {
+        await deleteDoc(doc(db, "gso_envanter", id));
+    }
+};
+
 
 <script>
     function navigateTo(pageId) {
