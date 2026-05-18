@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kolay Envanter Takip</title>
+    
+    <!-- PWA için Gerekli Manifest Baðlantýsý -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2196F3; margin-top: 0; }
+        form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        input { padding: 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 16px; }
+        button.btn-add { background-color: #2196F3; color: white; border: none; padding: 12px; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        button.btn-add:hover { background-color: #1e88e5; }
+        .product-card { display: flex; justify-content: space-between; align-items: center; padding: 15px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 10px; background: #fafafa; }
+        .product-info strong { font-size: 18px; display: block; }
+        .product-info span { font-size: 16px; color: #666; }
+        .stock-count { font-weight: bold; }
+        .stock-count.low { color: #d32f2f; }
+        .stock-count.good { color: #388e3c; }
+        .actions { display: flex; gap: 8px; align-items: center; }
+        .btn-action { width: 40px; height: 40px; font-size: 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-minus { background-color: #e0e0e0; color: #333; }
+        .btn-plus { background-color: #4caf50; color: white; }
+        .btn-delete { background-color: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; height: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Envanter Takip</h1>
+    
+    <!-- Ürün Ekleme Formu -->
+    <form id="productForm">
+        <input type="text" id="productName" placeholder="Ürün Adý" required>
+        <input type="number" id="productStock" placeholder="Baþlangýç Stoku" required min="0">
+        <button type="submit" class="btn-add">Ürünü Listeye Ekle</button>
+    </form>
+
+    <!-- Ürün Listesi Bölümü -->
+    <div id="productList">
+        <!-- Veriler JavaScript ile buraya akacak -->
+    </div>
+</div>
+
+<!-- Firebase Modülleri (CDN üzerinden yüklüyoruz) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, deleteDoc } 
+    from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // TODO: Kendi Firebase bilgilerini buraya yapýþtýr
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Firebase'i baþlat ve Firestore referansýný al
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const productsCollection = collection(db, "products");
+
+    // Formu dinle ve yeni ürün ekle
+    document.getElementById('productForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('productName').value;
+        const stock = parseInt(document.getElementById('productStock').value);
+
+        try {
+            await addDoc(productsCollection, { name, stock });
+            document.getElementById('productForm').reset();
+        } catch (error) {
+            alert("Hata oluþtu: " + error.message);
+        }
+    });
+
+    // Firestore'dan verileri anlýk (real-time) çek ve listele
+    onSnapshot(productsCollection, (snapshot) => {
+        const productListDiv = document.getElementById('productList');
+        productListDiv.innerHTML = ''; // Önceki listeyi temizle
+
+        snapshot.forEach((docSnap) => {
+            const product = docSnap.data();
+            const id = docSnap.id;
+
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            // Stok durumuna göre renk sýnýfý belirle (5'ten az ise kýrmýzý, deðilse yeþil)
+            const stockClass = product.stock < 5 ? 'stock-count low' : 'stock-count good';
+
+            card.innerHTML = `
+                <div class="product-info">
+                    <strong>${product.name}</strong>
+                    <span>Stok: <span class="${stockClass}">${product.stock}</span></span>
+                </div>
+                <div class="actions">
+                    <button class="btn-action btn-minus" onclick="changeStock('${id}', ${product.stock}, -1)">-</button>
+                    <button class="btn-action btn-plus" onclick="changeStock('${id}', ${product.stock}, 1)">+</button>
+                    <button class="btn-delete" onclick="deleteProduct('${id}')">Sil</button>
+                </div>
+            `;
+            productListDiv.appendChild(card);
+        });
+    });
+
+    // Stok Artýrma ve Azaltma Fonksiyonu
+    window.changeStock = async (id, currentStock, amount) => {
+        const newStock = currentStock + amount;
+        if (newStock < 0) return; // Stok sýfýrýn altýna düþmesin
+        const productRef = doc(db, "products", id);
+        await updateDoc(productRef, { stock: newStock });
+    };
+
+    // Ürün Silme Fonksiyonu
+    window.deleteProduct = async (id) => {
+        if (confirm("Bu ürünü silmek istediðinize emin misiniz?")) {
+            await deleteDoc(doc(db, "products", id));
+        }
+    };
+</script>
+
+<!-- PWA Service Worker Kaydý -->
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+            .then(() => console.log("PWA aktif edildi."))
+            .catch(err => console.log("Service Worker hatasý:", err));
+    }
+</script>
+
+</body>
+</html>
